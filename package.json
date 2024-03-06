@@ -7,7 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "pre-commit": "lint-staged ."
   },
   "dependencies": {
     "@react-navigation/bottom-tabs": "^6.5.11",
@@ -37,6 +38,7 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-native": "^4.1.0",
+    "lint-staged": "^15.2.2",
     "prettier": "^3.2.5",
     "typescript": "*"
   },
