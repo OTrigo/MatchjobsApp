@@ -1,0 +1,11 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Prevent direct commits to the master branch
+current_branch=$(git symbolic-ref --short HEAD)
+if [ "$current_branch" = "main" ]; then
+  echo "Erro: Direct commits on the master branch are not allowed."
+  exit 1
+fi
+
+yarn pre-commit
