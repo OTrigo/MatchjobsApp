@@ -1,0 +1,11 @@
+app.json
+babel.config.js
+tsconfig.json
+yarn.lock
+.prettierrc
+.gitignore
+package.json
+assets/
+.husky/
+.expo/
+node_modules/
