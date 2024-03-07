@@ -11,20 +11,36 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "package": "com.matchjobs.matchjobsapp"
     },
+    "plugins": ["@react-native-google-signin/google-signin"],
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.matchjobs.matchjobsapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "4dd7b636-e21f-4436-9c2e-ca311aee05b1"
+      }
+    },
+    "owner": "jorge_lucas",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/4dd7b636-e21f-4436-9c2e-ca311aee05b1"
+    },
+    "requestHeaders": {
+      "expo-channel-name": "main"
     }
   }
 }
