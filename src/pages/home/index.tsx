@@ -4,7 +4,7 @@ import {
   TouchableOpacity,
   Text,
   FlatList,
-  Dimensions,
+  Dimensions
 } from "react-native";
 import { styles } from "./styles";
 import { mockedPosts } from "./mockedPosts";
@@ -29,7 +29,7 @@ export default function Home() {
 
         <TouchableOpacity>
           <Text style={[styles.labelText, { color: "#FFF" }]}>Pra Você</Text>
-          <View style={styles.indicator}></View>
+          <View style={styles.indicator} />
         </TouchableOpacity>
       </View>
 
@@ -42,10 +42,10 @@ export default function Home() {
         snapToAlignment="center"
         snapToInterval={heightScreen}
         scrollEventThrottle={200}
-        decelerationRate={"fast"}
+        decelerationRate="fast"
         viewabilityConfig={{
           waitForInteraction: false,
-          viewAreaCoveragePercentThreshold: 100,
+          viewAreaCoveragePercentThreshold: 100
         }}
         showsVerticalScrollIndicator={false}
       />

@@ -1,8 +1,12 @@
-import { StatusBar } from 'react-native'
-import { NavigationContainer } from '@react-navigation/native'
-import { Routes } from './src/routes'
+import { StatusBar } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { useState } from "react";
+import { Routes } from "./src/routes";
+import Signin from "./src/pages/Signin";
 
-export default function App () {
+export default function App() {
+  const [login, setLogin] = useState(true);
+
   return (
     <NavigationContainer>
       <StatusBar
@@ -10,7 +14,7 @@ export default function App () {
         barStyle="light-content"
         translucent
       />
-      <Routes />
+      {login ? <Routes /> : <Signin setLogin={setLogin} />}
     </NavigationContainer>
-  )
+  );
 }

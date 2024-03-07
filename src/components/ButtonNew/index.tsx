@@ -1,7 +1,6 @@
 import { View } from "react-native";
-import { styles } from "./styles";
-
 import { Entypo } from "@expo/vector-icons";
+import { styles } from "./styles";
 
 export function ButtonNew({ size }: any) {
   return (

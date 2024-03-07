@@ -1,13 +1,15 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import Home from "../pages/home";
-import Search from "../pages/search";
-import Inbox from "../pages/inbox";
-import New from "../pages/new";
-import Profile from "../pages/profile";
-
 import { Ionicons } from "@expo/vector-icons";
+import Home from "../pages/Home";
+import Search from "../pages/Search";
+import Inbox from "../pages/Inbox";
+import New from "../pages/New";
+import Profile from "../pages/Profile";
+
 import { ButtonNew } from "../components/ButtonNew";
+// eslint-disable-next-line
+import Signin from "../pages/Signin";
 
 const Tab = createBottomTabNavigator();
 
@@ -30,18 +32,10 @@ export function Routes() {
         options={{
           tabBarIcon: ({ focused, size, color }) => {
             if (focused) {
-              return (
-                <Ionicons name="home" size={size} color={color}></Ionicons>
-              );
+              return <Ionicons name="home" size={size} color={color} />;
             }
 
-            return (
-              <Ionicons
-                name="home-outline"
-                size={size}
-                color={color}
-              ></Ionicons>
-            );
+            return <Ionicons name="home-outline" size={size} color={color} />;
           }
         }}
       />
@@ -51,18 +45,10 @@ export function Routes() {
         options={{
           tabBarIcon: ({ focused, size, color }) => {
             if (focused) {
-              return (
-                <Ionicons name="search" size={size} color={color}></Ionicons>
-              );
+              return <Ionicons name="search" size={size} color={color} />;
             }
 
-            return (
-              <Ionicons
-                name="search-outline"
-                size={size}
-                color={color}
-              ></Ionicons>
-            );
+            return <Ionicons name="search-outline" size={size} color={color} />;
           }
         }}
       />
@@ -70,9 +56,7 @@ export function Routes() {
         name="New"
         component={New}
         options={{
-          tabBarIcon: ({ size }) => {
-            return <ButtonNew size={size} />;
-          }
+          tabBarIcon: ({ size }) => <ButtonNew size={size} />
         }}
       />
       <Tab.Screen
@@ -86,7 +70,7 @@ export function Routes() {
                   name="chatbubble-ellipses"
                   size={size}
                   color={color}
-                ></Ionicons>
+                />
               );
             }
 
@@ -95,7 +79,7 @@ export function Routes() {
                 name="chatbubble-ellipses-outline"
                 size={size}
                 color={color}
-              ></Ionicons>
+              />
             );
           }
         }}
@@ -106,18 +90,10 @@ export function Routes() {
         options={{
           tabBarIcon: ({ focused, size, color }) => {
             if (focused) {
-              return (
-                <Ionicons name="person" size={size} color={color}></Ionicons>
-              );
+              return <Ionicons name="person" size={size} color={color} />;
             }
 
-            return (
-              <Ionicons
-                name="person-outline"
-                size={size}
-                color={color}
-              ></Ionicons>
-            );
+            return <Ionicons name="person-outline" size={size} color={color} />;
           }
         }}
       />

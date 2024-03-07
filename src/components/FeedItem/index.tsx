@@ -1,8 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Pressable, View, Text, TouchableOpacity } from "react-native";
 import { ResizeMode, Video } from "expo-av";
-import { styles } from "./styles";
 import { Ionicons } from "@expo/vector-icons";
+import { styles } from "./styles";
 
 interface FeedItemProps {
   data: any;
@@ -12,7 +12,7 @@ interface FeedItemProps {
 export function FeedItem({ data, currentVisibleitem }: FeedItemProps) {
   const [status, setStatus] = useState<any>({});
   const video = useRef<Video>(null);
-  const resizeValue = 'contain' as ResizeMode;
+  const resizeValue = "contain" as ResizeMode;
 
   useEffect(() => {
     if (currentVisibleitem?.id === data?.id) {
@@ -20,7 +20,7 @@ export function FeedItem({ data, currentVisibleitem }: FeedItemProps) {
     } else {
       video.current?.pauseAsync();
     }
-  }, [currentVisibleitem]);
+  }, []);
 
   function handlePlayer() {
     status?.isPlaying
