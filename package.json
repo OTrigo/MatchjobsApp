@@ -1,19 +1,19 @@
 {
   "name": "matchjobsapp",
   "version": "1.0.0",
-  "main": "node_modules/expo/App.tsx",
+  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "eslint .",
+    "lint": "eslint \"**/*.{ts,tsx}\"",
     "pre-commit": "lint-staged ."
   },
   "dependencies": {
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/native": "^6.1.9",
-    "expo": "~50.0.8",
+    "expo": "~50.0.11",
     "expo-av": "^13.10.5",
     "expo-status-bar": "~1.11.1",
     "react": "18.2.0",
@@ -23,10 +23,11 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "@babel/eslint-parser": "^7.23.10",
     "@types/react": "~18.2.45",
+    "typescript": "^5.1.3",
     "@typescript-eslint/eslint-plugin": "^7.1.0",
     "@typescript-eslint/parser": "^7.1.0",
+    "@babel/eslint-parser": "^7.23.10",
     "eslint": "^8.57.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^9.1.0",
@@ -39,8 +40,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-native": "^4.1.0",
     "lint-staged": "^15.2.2",
-    "prettier": "^3.2.5",
-    "typescript": "*"
+    "prettier": "^3.2.5"
   },
   "eslintConfig": {
     "extends": "universe/native"
