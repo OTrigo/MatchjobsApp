@@ -13,7 +13,6 @@ import { FeedItem } from "../../components/FeedItem";
 const { height: heightScreen } = Dimensions.get("screen");
 
 export default function Home() {
-  console.log("home")
   const [showItem, setShowItem] = useState(mockedPosts[0]);
   const onViewRef = useRef(({ viewableItems }: any) => {
     if (viewableItems && viewableItems?.length > 0) {
