@@ -1,25 +1,18 @@
 import { Text, TextInput, View, Image, TouchableOpacity } from "react-native";
 import { style } from "./styles";
 import { useState } from "react";
-import { api } from "../../infra/axios";
+import { signIn } from "../../contexts/AuthContext";
 
 export default function Signin() {
-    const [email,setEmail] = useState('')
-    const [password,setPassword] = useState('') 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-    async function login(){
-        try{
-            const response = await api.post('login/',{
-                email:email,
-                password:password
-            })
-            console.log(response)
-        }
-        catch(err){
-            console.log(err)
-        }
+  async function handleLogin() {
+    if (email === "" || password === "") {
+      return;
     }
-
+    signIn({ email, password });
+  }
 
   return (
     <View>
@@ -29,7 +22,7 @@ export default function Signin() {
         style={style.input}
         value={email}
         onChangeText={setEmail}
-        />
+      />
       <TextInput
         placeholder="********"
         secureTextEntry={true}
@@ -37,7 +30,7 @@ export default function Signin() {
         value={password}
         onChangeText={setPassword}
       />
-      <TouchableOpacity style={style.submit} onPress={login}>
+      <TouchableOpacity style={style.submit} onPress={handleLogin}>
         <Text style={style.textecenter}>Enviar</Text>
       </TouchableOpacity>
     </View>
