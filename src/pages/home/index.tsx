@@ -4,7 +4,7 @@ import {
   TouchableOpacity,
   Text,
   FlatList,
-  Dimensions,
+  Dimensions
 } from "react-native";
 import { styles } from "./styles";
 import { mockedPosts } from "./mockedPosts";
@@ -14,6 +14,7 @@ const { height: heightScreen } = Dimensions.get("screen");
 
 export default function Home() {
   const [showItem, setShowItem] = useState(mockedPosts[0]);
+  //eslint-disable-next-line
   const onViewRef = useRef(({ viewableItems }: any) => {
     if (viewableItems && viewableItems?.length > 0) {
       setShowItem(mockedPosts[viewableItems[0].index]);
@@ -45,7 +46,7 @@ export default function Home() {
         decelerationRate={"fast"}
         viewabilityConfig={{
           waitForInteraction: false,
-          viewAreaCoveragePercentThreshold: 100,
+          viewAreaCoveragePercentThreshold: 100
         }}
         showsVerticalScrollIndicator={false}
       />

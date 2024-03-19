@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "MatchJobsApp",
-    "slug": "MatchJobsApp",
+    "name": "matchjobsapp",
+    "slug": "matchjobsapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
