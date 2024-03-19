@@ -1,8 +1,10 @@
 import { StatusBar } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { Routes } from './src/routes'
+import Signin from './src/pages/Signin'
 
 export default function App () {
+  const login = false;
   return (
     <NavigationContainer>
       <StatusBar
@@ -10,7 +12,7 @@ export default function App () {
         barStyle="light-content"
         translucent
       />
-      <Routes />
+      {(login) ? <Routes /> : <Signin/>}
     </NavigationContainer>
   )
 }

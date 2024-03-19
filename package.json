@@ -12,8 +12,10 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "1.21.0",
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/native": "^6.1.9",
+    "axios": "^1.6.7",
     "expo": "~50.0.11",
     "expo-av": "^13.10.5",
     "expo-status-bar": "~1.11.1",
