@@ -5,8 +5,8 @@ export const style = StyleSheet.create({
     flex: 1
   },
   logo: {
-    width: 300,
-    height: 300,
+    width: 230,
+    height: 230,
     alignSelf: "center"
   },
   input: {
@@ -16,7 +16,7 @@ export const style = StyleSheet.create({
     borderRadius: 4,
     borderWidth: 1,
     alignSelf: "center",
-    marginVertical: 10
+    marginVertical: 5
   },
   submit: {
     width: "50%",
@@ -24,7 +24,7 @@ export const style = StyleSheet.create({
     backgroundColor: "#017bbed9",
     alignSelf: "center",
     borderRadius: 4,
-    marginTop: 15
+    marginTop: 20
   },
   textecenter: {
     marginTop: "5%",
