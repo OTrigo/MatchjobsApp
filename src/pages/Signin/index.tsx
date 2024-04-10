@@ -4,17 +4,24 @@ import { useState } from "react";
 import { signIn } from "../../contexts/AuthContext";
 
 
+interface navigationProps{
+  navigation: any;//arrumar a tipagem
+  getData: ()=>Promise<void>
+}
 
-//arrumar a tipagem
-export default function Signin({navigation}:any) {
+
+
+export default function Signin({navigation,getData}:navigationProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
 
   async function handleLogin() {
     if (email === "" || password === "") {
       return;
     }
-    signIn({ email, password });
+    await signIn({ email, password });
+    getData();
   }
 
   return (

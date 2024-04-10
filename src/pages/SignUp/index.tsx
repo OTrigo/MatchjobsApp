@@ -1,12 +1,17 @@
 import { useState } from "react";
 import { Text, View, Image, TextInput, TouchableOpacity } from "react-native";
 import { style } from "./styles";
+import { signUp } from "../../contexts/AuthContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-function handleCreate(){
-    console.log('teste')
-}
 
 export default function SignUp() {
+  async function handleCreate(){
+    if (email === "" || password === "" || name === "") {
+      return;
+    }
+    signUp({ email, password, name });
+  }  
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -16,7 +21,7 @@ export default function SignUp() {
       <Image source={require("../../../assets/logo.png")} style={style.logo} />
       <Text style={style.label}>Nome:</Text>
       <TextInput
-        placeholder="Matheus Marazzi"
+        placeholder="João Carlos"
         style={style.input}
         value={name}
         onChangeText={setName}
