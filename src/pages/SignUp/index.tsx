@@ -4,13 +4,19 @@ import { style } from "./styles";
 import { signUp } from "../../contexts/AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+interface navigationProps{
+  navigation: any;//arrumar a tipagem
+  getData: ()=>Promise<void>
+}
 
-export default function SignUp() {
+export default function SignUp({navigation,getData}:navigationProps) {
   async function handleCreate(){
     if (email === "" || password === "" || name === "") {
       return;
     }
-    signUp({ email, password, name });
+    await signUp({ email, password, name });
+    getData();
+    
   }  
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");

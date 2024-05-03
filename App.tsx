@@ -43,7 +43,9 @@ export default function App () {
         <Stack.Screen name="SignIn" options={{headerShown: false}}>
             {(props) => <Signin {...props} getData={getData} />}
         </Stack.Screen>
-        <Stack.Screen name="SignUp" component={SignUp}/> 
+        <Stack.Screen name="SignUp" options={{headerShown: false}}>
+            {(props) => <SignUp {...props} getData={getData} />}
+        </Stack.Screen> 
       </Stack.Navigator>
       
       }
