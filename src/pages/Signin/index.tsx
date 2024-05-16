@@ -1,20 +1,16 @@
 import { Text, TextInput, View, Image, TouchableOpacity } from "react-native";
 import { style } from "./styles";
 import { useState } from "react";
-import { signIn } from "../../contexts/AuthContext";
+import { signIn } from "../../contexts/UserContext";
 
-
-interface navigationProps{
-  navigation: any;//arrumar a tipagem
-  getData: ()=>Promise<void>
+interface navigationProps {
+  navigation: any; //arrumar a tipagem
+  getData: () => Promise<void>;
 }
 
-
-
-export default function Signin({navigation,getData}:navigationProps) {
+export default function Signin({ navigation, getData }: navigationProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
 
   async function handleLogin() {
     if (email === "" || password === "") {
@@ -29,6 +25,7 @@ export default function Signin({navigation,getData}:navigationProps) {
       <Image source={require("../../../assets/logo.png")} style={style.logo} />
       <Text style={style.label}>Email:</Text>
       <TextInput
+        autoCapitalize="none"
         placeholder="meuemail@mail.com"
         style={style.input}
         value={email}
@@ -36,6 +33,7 @@ export default function Signin({navigation,getData}:navigationProps) {
       />
       <Text style={style.label}>Senha:</Text>
       <TextInput
+        autoCapitalize="none"
         placeholder="********"
         secureTextEntry={true}
         style={style.input}
@@ -45,7 +43,7 @@ export default function Signin({navigation,getData}:navigationProps) {
       <TouchableOpacity style={style.submit} onPress={handleLogin}>
         <Text style={style.textecenter}>Enviar</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+      <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
         <Text style={style.Link}>Criar conta</Text>
       </TouchableOpacity>
     </View>

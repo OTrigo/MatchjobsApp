@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Text, View, Image, TextInput, TouchableOpacity } from "react-native";
 import { style } from "./styles";
-import { signUp } from "../../contexts/AuthContext";
+import { signUp } from "../../contexts/UserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface navigationProps{
@@ -34,6 +34,7 @@ export default function SignUp({navigation,getData}:navigationProps) {
       />
       <Text style={style.label}>Email:</Text>
       <TextInput
+        autoCapitalize="none"
         placeholder="meuemail@mail.com"
         style={style.input}
         value={email}
@@ -41,6 +42,7 @@ export default function SignUp({navigation,getData}:navigationProps) {
       />
       <Text style={style.label}>Senha:</Text>
       <TextInput
+        autoCapitalize="none"
         placeholder="********"
         secureTextEntry={true}
         style={style.input}
