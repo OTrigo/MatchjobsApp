@@ -47,8 +47,8 @@ export default function Profile({ getData }: getDataProps) {
     loggout();
   };
   const handleDeleteUser = () => {
-    DeleteUser({id});
-    loggout()
+    DeleteUser({ id });
+    loggout();
   };
 
   return (
@@ -73,6 +73,7 @@ export default function Profile({ getData }: getDataProps) {
           size={24}
           color="black"
         />
+        <Text style={styles.textButton}>Deletar conta</Text>
       </TouchableOpacity>
       <ButtonAddPDF />
     </View>
