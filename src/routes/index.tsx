@@ -8,10 +8,11 @@ import New from "../pages/New";
 import Profile from "../pages/Profile";
 
 import { ButtonNew } from "../components/ButtonNew";
+import { getDataProps } from "../types/getData";
 
 const Tab = createBottomTabNavigator();
 
-export function Routes() {
+export function Routes({getData}:getDataProps) {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -100,7 +101,6 @@ export function Routes() {
       />
       <Tab.Screen
         name="Profile"
-        component={Profile}
         options={{
           tabBarIcon: ({ focused, size, color }) => {
             if (focused) {
@@ -118,7 +118,9 @@ export function Routes() {
             );
           }
         }}
-      />
+      >
+        {(props) => <Profile {...props} getData={getData} />}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 }
