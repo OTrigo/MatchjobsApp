@@ -12,7 +12,7 @@ interface FeedItemProps {
 export function FeedItem({ data, currentVisibleitem }: FeedItemProps) {
   const [status, setStatus] = useState<any>({});
   const video = useRef<Video>(null);
-  const resizeValue = 'contain' as ResizeMode;
+  const resizeValue = "contain" as ResizeMode;
 
   useEffect(() => {
     if (currentVisibleitem?.id === data?.id) {
@@ -54,7 +54,9 @@ export function FeedItem({ data, currentVisibleitem }: FeedItemProps) {
       <Video
         ref={video}
         style={styles.video}
-        source={{ uri: data?.video }}
+        source={{
+          uri: `https://lfrigfcolhycpfxcxnjn.supabase.co/storage/v1/object/public/matchjobsVideos/${data.url}`
+        }}
         resizeMode={resizeValue}
         shouldPlay={false}
         isMuted={false}

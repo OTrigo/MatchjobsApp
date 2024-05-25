@@ -20,14 +20,23 @@ export default function App() {
     const data = await AsyncStorage.getItem("@matchjobs");
     if (data !== null) {
       const config = `bearer ${data}`;
-      const response: any = await api.get("/user/me", {
-        headers: {
-          Authorization: config.split('"').join("")
-        }
-      });
-      if (response.status == 200) {
-        setLogin(true);
-      }
+      const response = await api
+        .get("/user/me", {
+          headers: {
+            Authorization: config.split('"').join("")
+          }
+        })
+        .then((response) => {
+          if (response.status == 200) {
+            setLogin(true);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     }
     setIsLoading(false);
   }

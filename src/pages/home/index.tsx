@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   View,
   TouchableOpacity,
@@ -7,12 +7,26 @@ import {
   Dimensions
 } from "react-native";
 import { styles } from "./styles";
-import { mockedPosts } from "./mockedPosts";
 import { FeedItem } from "../../components/FeedItem";
+import { api } from "../../infra/axios";
 
 const { height: heightScreen } = Dimensions.get("screen");
 
 export default function Home() {
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    async function getVideos() {
+      setLoading(true);
+      const videos: any = await api.get("post/");
+      if (!videos) {
+        return;
+      }
+      setMockedPost(videos.data);
+      setLoading(false);
+    }
+    getVideos();
+  }, []);
+  const [mockedPosts, setMockedPost] = useState([]);
   const [showItem, setShowItem] = useState(mockedPosts[0]);
   //eslint-disable-next-line
   const onViewRef = useRef(({ viewableItems }: any) => {
@@ -21,7 +35,7 @@ export default function Home() {
     }
   });
 
-  return (
+  return !loading ? (
     <View style={styles.container}>
       <View style={styles.labels}>
         <TouchableOpacity>
@@ -51,5 +65,7 @@ export default function Home() {
         showsVerticalScrollIndicator={false}
       />
     </View>
+  ) : (
+    <Text>Erro ao carregar videos</Text>
   );
 }
