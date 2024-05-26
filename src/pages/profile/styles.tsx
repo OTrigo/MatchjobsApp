@@ -11,15 +11,15 @@ export const styles = StyleSheet.create({
     marginTop: "3%"
   },
   inputs: {
-    marginTop: "30%"
+    marginTop: "15%"
   },
   updateButton: {
     alignSelf: "center",
-    backgroundColor: "#037abe",
-    width: "70%",
+    borderColor: "#037abe",
+    borderWidth: 2,
+    width: "30%",
     marginVertical: "3%",
-    marginRight: "10%",
-    borderRadius: 3,
+    borderRadius: 10,
     padding: 5,
     flexDirection: "row",
     justifyContent: "center"
@@ -29,19 +29,52 @@ export const styles = StyleSheet.create({
     color: "#FFF",
     fontWeight: "bold"
   },
-  modalContainer: {
-    backgroundColor: "#FFF",
-    borderColor: "#037abe",
-    borderWidth: 5,
-    borderRadius: 3,
+  backdrop: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
     alignItems: "center",
-    width: "80%",
-    height: "20%",
-    alignSelf: "center",
-    marginVertical: "75%",
-    justifyContent: "space-between"
+    justifyContent: "center"
   },
-  buttonContainer: {
-    flexDirection: "row"
+  modalContainer: {
+    backgroundColor: "white",
+    borderRadius: 20,
+    height: "50%",
+    paddingHorizontal: "7%",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  updateModalButton: {
+    alignSelf: "center",
+    backgroundColor: "#037abe",
+    width: "70%",
+    marginVertical: "3%",
+    marginRight: "10%",
+    borderRadius: 3,
+    padding: 5,
+    paddingHorizontal: "10%"
+  },
+  closeIcon: {
+    alignSelf: "flex-end",
+    position: "absolute",
+    marginVertical: "2%",
+    right: "3%"
+  },
+  title: {
+    fontWeight: "bold",
+    fontSize: 20
+  },
+  videosContainer: {
+    flex: 1,
+    backgroundColor: "#f0f0f0",
+    borderTopWidth: 3,
+    borderColor: "#037abe",
+    paddingTop: "20%"
   }
 });

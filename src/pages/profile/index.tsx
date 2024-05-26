@@ -3,18 +3,20 @@ import {
   Text,
   TouchableOpacity,
   Modal,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  ScrollView
 } from "react-native";
 import { styles } from "./styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getDataProps } from "../../types/getData";
 import ButtonAddPDF from "../../components/ButtonAddPDF";
 import { Entypo } from "@expo/vector-icons";
-import { InputEditable, InputNotEditable } from "../../components/Inputs";
+import { InputEditable } from "../../components/Inputs";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { DeleteUser, UpdateUser } from "../../contexts/UserContext";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
+import { Video } from "expo-av";
 
 interface JwtPayload {
   id: number;
@@ -27,6 +29,7 @@ interface JwtPayload {
 
 export default function Profile({ getData }: getDataProps) {
   const [name, setName] = useState<string>("");
+  const [myVideos, setMyvideos] = useState(null);
   const [password, setPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [id, setId] = useState<number>(0);
@@ -45,7 +48,6 @@ export default function Profile({ getData }: getDataProps) {
       setEmail(data.email);
       setId(data.id);
       setPassword(data.password);
-      console.log(data.id);
     };
     getAsyncData();
   }, []);
@@ -70,52 +72,57 @@ export default function Profile({ getData }: getDataProps) {
       <TouchableOpacity onPress={loggout} style={styles.loggout}>
         <Entypo name="log-out" size={24} color="red" />
       </TouchableOpacity>
-      <View style={styles.inputs}>
-        <InputNotEditable data={name} />
-        <InputEditable data={password} setChange={setPassword} />
-        <InputEditable data={email} setChange={setEmail} />
-      </View>
-      <TouchableOpacity onPress={handleUpdateUser} style={styles.updateButton}>
-        <Text style={styles.textButton}>Atualizar Dados</Text>
-      </TouchableOpacity>
+      <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: 20 }}>
+        Olá, {name}
+      </Text>
       <TouchableOpacity
         onPress={() => setIsOpen(true)}
-        style={[styles.updateButton, { backgroundColor: "red" }]}
+        style={[styles.updateButton]}
       >
-        <MaterialCommunityIcons
-          name="account-cancel-outline"
-          size={24}
-          color="black"
-        />
-        <Text style={styles.textButton}>Deletar conta</Text>
+        <Text style={(styles.textButton, { color: "#000" })}>Editar dados</Text>
       </TouchableOpacity>
-      <ButtonAddPDF />
-      <Modal animationType="fade" visible={isOpen} transparent={true}>
-        <View style={styles.modalContainer}>
-          <Text style={{ fontSize: 20, textAlign: "center" }}>
-            Tem certeza que deseja deletar sua conta?
+      <ScrollView style={styles.videosContainer}>
+        {myVideos ? (
+          <Video />
+        ) : (
+          <Text
+            style={{ textAlign: "center", fontWeight: "bold", fontSize: 15 }}
+          >
+            Você ainda não postou nenhum video
           </Text>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              onPress={() => {
-                setIsConfirmated(true);
-                handleDeleteUser();
-              }}
-              style={{ marginRight: "60%" }}
-            >
-              <Text style={{ fontSize: 20, color: "red", fontWeight: "bold" }}>
-                Sim
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setIsOpen(false)}>
-              <Text
-                style={{ fontSize: 20, color: "#037abe", fontWeight: "bold" }}
-              >
-                Não
-              </Text>
-            </TouchableOpacity>
+        )}
+      </ScrollView>
+      <Modal animationType="fade" visible={isOpen} transparent={true}>
+        <TouchableWithoutFeedback onPress={() => setIsOpen(false)}>
+          <View style={styles.backdrop}>
+            <TouchableWithoutFeedback>
+              <View style={styles.modalContainer}>
+                <TouchableOpacity
+                  onPress={() => setIsOpen(false)}
+                  style={styles.closeIcon}
+                >
+                  <Text>
+                    <AntDesign name="close" size={24} color="black" />
+                  </Text>
+                </TouchableOpacity>
+                <Text style={styles.title}>Editar</Text>
+                <View style={styles.inputs}>
+                  <Text style={{ marginLeft: "7%" }}>Email:</Text>
+                  <InputEditable data={email} setChange={setEmail} />
+                  <Text style={{ marginLeft: "7%" }}>Senha:</Text>
+                  <InputEditable data={password} setChange={setPassword} />
+                  <ButtonAddPDF />
+                </View>
+                <TouchableOpacity
+                  onPress={handleUpdateUser}
+                  style={styles.updateModalButton}
+                >
+                  <Text style={styles.textButton}>Atualizar Dados</Text>
+                </TouchableOpacity>
+              </View>
+            </TouchableWithoutFeedback>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </Modal>
     </View>
   );
