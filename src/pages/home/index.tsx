@@ -9,12 +9,22 @@ import {
 import { styles } from "./styles";
 import { FeedItem } from "../../components/FeedItem";
 import { api } from "../../infra/axios";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { jwtDecode } from "jwt-decode";
 
 const { height: heightScreen } = Dimensions.get("screen");
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState({});
   useEffect(() => {
+    async function getUserData() {
+      const storage = await AsyncStorage.getItem("@matchjobs");
+      const userd = jwtDecode(storage ? storage : "");
+      setUser(userd);
+      console.log(user);
+    }
     async function getVideos() {
       setLoading(true);
       const videos: any = await api.get("post/");
@@ -25,7 +35,9 @@ export default function Home() {
       setLoading(false);
     }
     getVideos();
+    getUserData();
   }, []);
+  useEffect(() => {}, []);
   const [mockedPosts, setMockedPost] = useState([]);
   const [showItem, setShowItem] = useState(mockedPosts[0]);
   //eslint-disable-next-line
@@ -47,23 +59,28 @@ export default function Home() {
           <View style={styles.indicator}></View>
         </TouchableOpacity>
       </View>
-
-      <FlatList
-        data={mockedPosts}
-        renderItem={({ item }) => (
-          <FeedItem data={item} currentVisibleitem={showItem} />
-        )}
-        onViewableItemsChanged={onViewRef?.current}
-        snapToAlignment="center"
-        snapToInterval={heightScreen}
-        scrollEventThrottle={200}
-        decelerationRate={"fast"}
-        viewabilityConfig={{
-          waitForInteraction: false,
-          viewAreaCoveragePercentThreshold: 100
-        }}
-        showsVerticalScrollIndicator={false}
-      />
+      <GestureHandlerRootView style={styles.container}>
+        <FlatList
+          data={mockedPosts}
+          renderItem={({ item }) => (
+            <FeedItem
+              data={item}
+              currentVisibleitem={showItem}
+              userData={user}
+            />
+          )}
+          onViewableItemsChanged={onViewRef?.current}
+          snapToAlignment="center"
+          snapToInterval={heightScreen}
+          scrollEventThrottle={200}
+          decelerationRate={"fast"}
+          viewabilityConfig={{
+            waitForInteraction: false,
+            viewAreaCoveragePercentThreshold: 100
+          }}
+          showsVerticalScrollIndicator={false}
+        />
+      </GestureHandlerRootView>
     </View>
   ) : (
     <Text>Erro ao carregar videos</Text>
