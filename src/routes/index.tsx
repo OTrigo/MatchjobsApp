@@ -12,7 +12,7 @@ import { getDataProps } from "../types/getData";
 
 const Tab = createBottomTabNavigator();
 
-export function Routes({getData}:getDataProps) {
+export function Routes({ getData }: getDataProps) {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -31,22 +31,14 @@ export function Routes({getData}:getDataProps) {
         options={{
           tabBarIcon: ({ focused, size, color }) => {
             if (focused) {
-              return (
-                <Ionicons name="home" size={size} color={color} />
-              );
+              return <Ionicons name="home" size={size} color={color} />;
             }
 
-            return (
-              <Ionicons
-                name="home-outline"
-                size={size}
-                color={color}
-               />
-            );
+            return <Ionicons name="home-outline" size={size} color={color} />;
           }
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Search"
         component={Search}
         options={{
@@ -66,7 +58,7 @@ export function Routes({getData}:getDataProps) {
             );
           }
         }}
-      />
+      /> */}
       <Tab.Screen
         name="New"
         component={New}
@@ -74,7 +66,7 @@ export function Routes({getData}:getDataProps) {
           tabBarIcon: ({ size }) => <ButtonNew size={size} />
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Inbox"
         component={Inbox}
         options={{
@@ -98,24 +90,16 @@ export function Routes({getData}:getDataProps) {
             );
           }
         }}
-      />
+      /> */}
       <Tab.Screen
         name="Profile"
         options={{
           tabBarIcon: ({ focused, size, color }) => {
             if (focused) {
-              return (
-                <Ionicons name="person" size={size} color={color} />
-              );
+              return <Ionicons name="person" size={size} color={color} />;
             }
 
-            return (
-              <Ionicons
-                name="person-outline"
-                size={size}
-                color={color}
-               />
-            );
+            return <Ionicons name="person-outline" size={size} color={color} />;
           }
         }}
       >

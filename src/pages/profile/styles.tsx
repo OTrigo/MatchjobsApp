@@ -71,10 +71,10 @@ export const styles = StyleSheet.create({
     fontSize: 20
   },
   videosContainer: {
-    flex: 1,
+    width: "100%",
     backgroundColor: "#f0f0f0",
     borderTopWidth: 3,
-    borderColor: "#037abe",
-    paddingTop: "20%"
+    borderColor: "#037abe"
+    // paddingTop: "20%"
   }
 });

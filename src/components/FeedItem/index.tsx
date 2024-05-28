@@ -8,6 +8,8 @@ import { api } from "../../infra/axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useIsFocused } from "@react-navigation/native";
+import MyVideoComponent from "../MyVideoComponent";
 
 interface FeedItemProps {
   data: any;
@@ -20,6 +22,7 @@ export function FeedItem({
   currentVisibleitem,
   userData
 }: FeedItemProps) {
+  const isFocused = useIsFocused();
   const [status, setStatus] = useState<any>({});
   const video = useRef<Video>(null);
   const resizeValue = "contain" as ResizeMode;
@@ -49,7 +52,10 @@ export function FeedItem({
     } else {
       video.current?.pauseAsync();
     }
-  }, [currentVisibleitem]);
+    if (!isFocused) {
+      video.current?.pauseAsync();
+    }
+  }, [currentVisibleitem, isFocused]);
 
   function handlePlayer() {
     status?.isPlaying

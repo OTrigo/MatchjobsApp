@@ -16,7 +16,10 @@ import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { DeleteUser, UpdateUser } from "../../contexts/UserContext";
 import { AntDesign } from "@expo/vector-icons";
-import { Video } from "expo-av";
+import { ResizeMode, Video } from "expo-av";
+import { api } from "../../infra/axios";
+import { FlatList } from "react-native";
+import MyVideoComponent from "../../components/MyVideoComponent";
 
 interface JwtPayload {
   id: number;
@@ -26,10 +29,18 @@ interface JwtPayload {
   iat: number;
   exp: number;
 }
-
+interface myVideosProps {
+  id: number;
+  name: string;
+  description: null | string;
+  createdAt: string;
+  userId: number;
+  videoUrl: null | string;
+  jobsId: null | number;
+}
 export default function Profile({ getData }: getDataProps) {
   const [name, setName] = useState<string>("");
-  const [myVideos, setMyvideos] = useState(null);
+  const [myVideos, setMyvideos] = useState<null | [myVideosProps]>(null);
   const [password, setPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [id, setId] = useState<number>(0);
@@ -49,7 +60,10 @@ export default function Profile({ getData }: getDataProps) {
       setId(data.id);
       setPassword(data.password);
     };
+
     getAsyncData();
+
+    console.log(`post/myposts/${id}`);
   }, []);
   async function loggout() {
     await AsyncStorage.removeItem("@matchjobs");
@@ -66,6 +80,14 @@ export default function Profile({ getData }: getDataProps) {
       loggout();
     }
   };
+  useEffect(() => {
+    const getMyVideos = async () => {
+      const data = await api.get(`post/myposts/${id}`);
+      setMyvideos(data.data);
+      console.log(myVideos);
+    };
+    getMyVideos();
+  }, [id]);
 
   return (
     <View style={styles.container}>
@@ -81,17 +103,20 @@ export default function Profile({ getData }: getDataProps) {
       >
         <Text style={(styles.textButton, { color: "#000" })}>Editar dados</Text>
       </TouchableOpacity>
-      <ScrollView style={styles.videosContainer}>
-        {myVideos ? (
-          <Video />
-        ) : (
-          <Text
-            style={{ textAlign: "center", fontWeight: "bold", fontSize: 15 }}
-          >
-            Você ainda não postou nenhum video
-          </Text>
-        )}
-      </ScrollView>
+      <View style={styles.videosContainer}></View>
+      {myVideos && myVideos.length > 0 ? (
+        <FlatList
+          data={myVideos}
+          renderItem={({ item }) => <MyVideoComponent data={item} />}
+          keyExtractor={(item) => item.id.toString()}
+          numColumns={3}
+        />
+      ) : (
+        <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: 15 }}>
+          Você ainda não postou nenhum video
+        </Text>
+      )}
+
       <Modal animationType="fade" visible={isOpen} transparent={true}>
         <TouchableWithoutFeedback onPress={() => setIsOpen(false)}>
           <View style={styles.backdrop}>
@@ -118,6 +143,12 @@ export default function Profile({ getData }: getDataProps) {
                   style={styles.updateModalButton}
                 >
                   <Text style={styles.textButton}>Atualizar Dados</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={handleDeleteUser}
+                  style={[styles.updateModalButton, { backgroundColor: "red" }]}
+                >
+                  <Text style={styles.textButton}>Deletar conta</Text>
                 </TouchableOpacity>
               </View>
             </TouchableWithoutFeedback>

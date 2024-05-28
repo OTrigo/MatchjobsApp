@@ -40,10 +40,10 @@ export default function Home() {
   useEffect(() => {}, []);
   const [mockedPosts, setMockedPost] = useState([]);
   const [showItem, setShowItem] = useState(mockedPosts[0]);
-  //eslint-disable-next-line
   const onViewRef = useRef(({ viewableItems }: any) => {
-    if (viewableItems && viewableItems?.length > 0) {
+    if (viewableItems && viewableItems.length > 0) {
       setShowItem(mockedPosts[viewableItems[0].index]);
+      console.log(showItem);
     }
   });
 
