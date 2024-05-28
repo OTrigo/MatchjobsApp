@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
     alignItems: "center"
   },
   input: {
+    marginVertical: "1%",
     width: "80%",
     height: "5%",
     borderWidth: 1,
@@ -14,5 +15,9 @@ export const styles = StyleSheet.create({
   },
   preview: {
     width: 10
+  },
+  title: {
+    width: "80%",
+    textAlign: "left"
   }
 });

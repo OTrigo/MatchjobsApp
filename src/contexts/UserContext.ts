@@ -53,25 +53,22 @@ async function signUp({ email, password, name }: UserProp) {
     console.error(err);
   }
 }
-async function UpdateUser(email:string, name:string, password: string, id:number){
+async function UpdateUser(email:string, password: string, id:number){
   const token = await AsyncStorage.getItem("@matchjobs")
   const config = `bearer ${token}`
-  console.log(email);
-  try {
+  const result =
     await api.put(`user/${id}`, {
       email: email,
       password: password,
-      curriculo: id+name,
     },{
       headers:{
         Authorization: config.split('"').join('')
       }
-    });
-    alert('Dados Atualizados')
-  } catch (err: any) {
-
+    }).then((result)=>{
+      console.log(result.data)
+    }).catch ((err: any)=> {
     console.error(err.response.data);
-  }
+  })
 }
 async function DeleteUser(id:number){
   try {

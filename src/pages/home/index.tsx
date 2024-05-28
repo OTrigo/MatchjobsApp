@@ -12,10 +12,12 @@ import { api } from "../../infra/axios";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
+import { useIsFocused } from "@react-navigation/native";
 
 const { height: heightScreen } = Dimensions.get("screen");
 
 export default function Home() {
+  const focused = useIsFocused();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState({});
   useEffect(() => {
@@ -36,7 +38,7 @@ export default function Home() {
     }
     getVideos();
     getUserData();
-  }, []);
+  }, [focused]);
   useEffect(() => {}, []);
   const [mockedPosts, setMockedPost] = useState([]);
   const [showItem, setShowItem] = useState(mockedPosts[0]);

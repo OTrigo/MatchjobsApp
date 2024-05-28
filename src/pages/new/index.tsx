@@ -9,9 +9,9 @@ export default function New() {
 
   return (
     <View style={styles.container}>
-      <Text>Titulo:</Text>
+      <Text style={styles.title}>Titulo:</Text>
       <TextInput value={title} onChangeText={setTitle} style={styles.input} />
-      <Text>Descrição</Text>
+      <Text style={styles.title}>Descrição</Text>
       <TextInput value={desc} onChangeText={setDesc} style={styles.input} />
       <ButtonAddVideo title={title} description={desc} />
     </View>

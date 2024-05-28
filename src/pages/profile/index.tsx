@@ -20,6 +20,7 @@ import { ResizeMode, Video } from "expo-av";
 import { api } from "../../infra/axios";
 import { FlatList } from "react-native";
 import MyVideoComponent from "../../components/MyVideoComponent";
+import { useIsFocused } from "@react-navigation/native";
 
 interface JwtPayload {
   id: number;
@@ -46,6 +47,7 @@ export default function Profile({ getData }: getDataProps) {
   const [id, setId] = useState<number>(0);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isConfirmated, setIsConfirmated] = useState<boolean>(false);
+  const focused = useIsFocused();
 
   useEffect(() => {
     const getAsyncData = async () => {
@@ -70,8 +72,10 @@ export default function Profile({ getData }: getDataProps) {
     getData();
   }
   const handleUpdateUser = async () => {
-    UpdateUser(email, name, password, id);
-    loggout();
+    await UpdateUser(email, password, id).then(() => {
+      alert("usuario alterado, por favor realize o login novamente");
+      loggout();
+    });
   };
   const handleDeleteUser = () => {
     setIsOpen(true);
@@ -87,7 +91,7 @@ export default function Profile({ getData }: getDataProps) {
       console.log(myVideos);
     };
     getMyVideos();
-  }, [id]);
+  }, [id, focused]);
 
   return (
     <View style={styles.container}>

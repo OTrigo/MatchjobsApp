@@ -21,7 +21,11 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.matheus_06.matchjobsapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -33,7 +37,11 @@
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "1fdbe1c7-cb94-4a50-b5cd-5dcc427ecbe2"
+      }
+    }
   }
-
 }

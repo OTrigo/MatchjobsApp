@@ -53,8 +53,10 @@ export default function ButtonAddVideo({ title, description }: videoProps) {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={pickImage}>
-        <Text>Escolher Video</Text>
+      <TouchableOpacity style={styles.button} onPress={pickImage}>
+        <Text style={{ color: "#FFF", fontWeight: "bold" }}>
+          Escolher Video
+        </Text>
       </TouchableOpacity>
       {video && (
         <>
@@ -68,7 +70,7 @@ export default function ButtonAddVideo({ title, description }: videoProps) {
           <TouchableOpacity onPress={handleUploadVideo}>
             <Text>Enviar</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={RemoveVideo}>
+          <TouchableOpacity onPress={RemoveVideo} style={styles.button}>
             <Text>Remover video</Text>
           </TouchableOpacity>
         </>
