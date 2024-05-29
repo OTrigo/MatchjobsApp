@@ -9,6 +9,7 @@ import { jwtDecode } from "jwt-decode";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ButtonAddPDF() {
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedPdf, setSelectedPDF] = useState<DocumentPickerResult | null>(
     null
   );
@@ -27,9 +28,14 @@ export default function ButtonAddPDF() {
   }
 
   async function handleUploadPDF() {
+    setIsLoading(true);
+
     const userData = await AsyncStorage.getItem("@matchjobs");
     const { id, name } = jwtDecode(userData);
-    UploadPDF(selectedPdf?.assets[0], id + name);
+    UploadPDF(selectedPdf?.assets[0], id + name).then(() => {
+      setIsLoading(false);
+    });
+    setIsLoading(false);
   }
   function RemovePDF() {
     setSelectedPDF(null);

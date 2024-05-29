@@ -23,23 +23,23 @@ export const style = StyleSheet.create({
     height: 40,
     backgroundColor: "#017bbed9",
     alignSelf: "center",
+    justifyContent: "center",
     borderRadius: 4,
     marginTop: 15
   },
   textecenter: {
-    marginTop: "5%",
     textAlign: "center",
     color: "white"
   },
-  Link:{
-    color: 'blue',
-    textDecorationLine:  'underline',
-    textAlign: 'center',
-    marginTop: '7%'
+  Link: {
+    color: "blue",
+    textDecorationLine: "underline",
+    textAlign: "center",
+    marginTop: "7%"
   },
-  label:{
-    marginLeft: '10%',
+  label: {
+    marginLeft: "10%",
     fontSize: 15,
-    fontWeight: 'bold'
-  } 
+    fontWeight: "bold"
+  }
 });

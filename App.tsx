@@ -1,4 +1,4 @@
-import { StatusBar, Text } from "react-native";
+import { ActivityIndicator, StatusBar, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { Routes } from "./src/routes";
 import Signin from "./src/pages/Signin";
@@ -9,10 +9,11 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { api } from "./src/infra/axios";
+import { View } from "react-native";
 
 export default function App() {
   const [login, setLogin] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const Stack = createStackNavigator();
   async function getData() {
     setLogin(false);
@@ -67,8 +68,10 @@ export default function App() {
       </NavigationContainer>
     </>
   ) : (
-    <Text style={{ textAlign: "center", fontSize: 40, marginTop: 200 }}>
-      Carregando...
-    </Text>
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Text style={{ textAlign: "center", fontSize: 40 }}>
+        <ActivityIndicator size={40} color="#037abe" />
+      </Text>
+    </View>
   );
 }

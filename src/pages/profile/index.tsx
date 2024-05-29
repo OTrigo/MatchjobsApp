@@ -4,7 +4,8 @@ import {
   TouchableOpacity,
   Modal,
   TouchableWithoutFeedback,
-  ScrollView
+  ScrollView,
+  ActivityIndicator
 } from "react-native";
 import { styles } from "./styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -46,7 +47,7 @@ export default function Profile({ getData }: getDataProps) {
   const [email, setEmail] = useState<string>("");
   const [id, setId] = useState<number>(0);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isConfirmated, setIsConfirmated] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const focused = useIsFocused();
 
   useEffect(() => {
@@ -72,17 +73,20 @@ export default function Profile({ getData }: getDataProps) {
     getData();
   }
   const handleUpdateUser = async () => {
-    await UpdateUser(email, password, id).then(() => {
-      alert("usuario alterado, por favor realize o login novamente");
-      loggout();
-    });
+    setIsLoading(true);
+    await UpdateUser(email, password, id)
+      .then(() => {
+        alert("usuario alterado, por favor realize o login novamente");
+        loggout();
+      })
+      .then(() => {
+        setIsLoading(false);
+      });
+    setIsLoading(false);
   };
   const handleDeleteUser = () => {
-    setIsOpen(true);
-    if (isConfirmated) {
-      DeleteUser(id);
-      loggout();
-    }
+    DeleteUser(id);
+    loggout();
   };
   useEffect(() => {
     const getMyVideos = async () => {
@@ -146,7 +150,11 @@ export default function Profile({ getData }: getDataProps) {
                   onPress={handleUpdateUser}
                   style={styles.updateModalButton}
                 >
-                  <Text style={styles.textButton}>Atualizar Dados</Text>
+                  {isLoading ? (
+                    <ActivityIndicator color="#FFF" />
+                  ) : (
+                    <Text style={{ color: "#FFF" }}>Atualizar dados</Text>
+                  )}
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={handleDeleteUser}

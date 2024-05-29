@@ -5,7 +5,8 @@ import {
   View,
   StyleSheet,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { styles } from "./styles";
@@ -13,6 +14,7 @@ import { ResizeMode, Video } from "expo-av";
 import { jwtDecode } from "jwt-decode";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UploadVideo } from "../../contexts/VideoContext";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 interface videoProps {
   title: string;
   description: string;
@@ -22,6 +24,7 @@ export default function ButtonAddVideo({ title, description }: videoProps) {
   const date = new Date();
 
   const [video, setVideo] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -37,6 +40,7 @@ export default function ButtonAddVideo({ title, description }: videoProps) {
     }
   };
   async function handleUploadVideo() {
+    setIsLoading(true);
     const userData: any = await AsyncStorage.getItem("@matchjobs");
     const { id, name } = jwtDecode(userData);
     UploadVideo(
@@ -45,7 +49,10 @@ export default function ButtonAddVideo({ title, description }: videoProps) {
       title,
       description,
       id.toString()
-    );
+    ).then(() => {
+      setIsLoading(false);
+    });
+    setIsLoading(false);
   }
   function RemoveVideo() {
     setVideo(null);
@@ -67,11 +74,17 @@ export default function ButtonAddVideo({ title, description }: videoProps) {
             style={styles.video}
             resizeMode={ResizeMode.CONTAIN}
           />
-          <TouchableOpacity onPress={handleUploadVideo}>
-            <Text>Enviar</Text>
+          <TouchableOpacity onPress={handleUploadVideo} style={styles.button}>
+            {isLoading ? (
+              <ActivityIndicator color="#FFF" />
+            ) : (
+              <Text style={{ color: "#FFF" }}>Enviar</Text>
+            )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={RemoveVideo} style={styles.button}>
-            <Text>Remover video</Text>
+          <TouchableOpacity onPress={RemoveVideo}>
+            <Text>
+              <FontAwesome name="remove" size={24} color="#037abe" />
+            </Text>
           </TouchableOpacity>
         </>
       )}
