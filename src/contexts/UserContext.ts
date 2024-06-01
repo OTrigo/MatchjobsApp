@@ -1,3 +1,4 @@
+import axios from "axios";
 import { api } from "../infra/axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -64,19 +65,24 @@ async function UpdateUser(email:string, password: string, id:number){
       headers:{
         Authorization: config.split('"').join('')
       }
+
     }).then((result)=>{
       console.log(result.data)
     }).catch ((err: any)=> {
-    console.error(err.response.data);
+    console.error(err.data);
+    console.log(result)
   })
 }
 async function DeleteUser(id:number){
-  try {
-    await api.delete(`user/${id}`);
-    alert('Conta Deletada')
-  } catch (err: any) {
-    console.error(err);
-  }
+  const end = `user/${id}`
+  console.log(end)
+    const result = 
+    await axios.delete(`https://matchjobsbackend-7lo5.onrender.com/${end}`).then((response)=>{
+      console.log(response.data)
+      alert("usuario deletado com sucesso!")
+    }).catch((error) =>{
+      console.log(error)
+  })
 }
 
 export { signIn, signUp, UpdateUser,  DeleteUser };

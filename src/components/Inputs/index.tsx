@@ -6,11 +6,12 @@ import { SetStateAction, useState } from "react";
 interface propsEdit {
   data: string;
   setChange: (text: string) => void;
+  isPassword: boolean;
 }
 interface propsNotEdit {
   data: string;
 }
-function InputEditable({ data, setChange }: propsEdit) {
+function InputEditable({ data, setChange, isPassword }: propsEdit) {
   function switchIsEditable() {
     isEditable ? setIsEditable(false) : setIsEditable(true);
   }
@@ -22,6 +23,8 @@ function InputEditable({ data, setChange }: propsEdit) {
         value={data}
         onChangeText={setChange}
         editable={isEditable}
+        secureTextEntry={isPassword}
+        placeholder="******"
       />
       <TouchableOpacity onPress={switchIsEditable}>
         <FontAwesome5

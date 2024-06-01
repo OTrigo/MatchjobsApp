@@ -61,7 +61,6 @@ export default function Profile({ getData }: getDataProps) {
       setName(data.name);
       setEmail(data.email);
       setId(data.id);
-      setPassword(data.password);
     };
 
     getAsyncData();
@@ -74,24 +73,32 @@ export default function Profile({ getData }: getDataProps) {
   }
   const handleUpdateUser = async () => {
     setIsLoading(true);
-    await UpdateUser(email, password, id)
-      .then(() => {
-        alert("usuario alterado, por favor realize o login novamente");
-        loggout();
-      })
-      .then(() => {
-        setIsLoading(false);
-      });
+    if (password != "") {
+      await UpdateUser(email, password, id)
+        .then((response) => {
+          console.log(response);
+          alert("usuario alterado, por favor realize o login novamente");
+          loggout();
+        })
+        .then(() => {
+          setIsLoading(false);
+        });
+    } else {
+      alert("por favor insira sua senha para atualizar seus dados");
+    }
+
     setIsLoading(false);
   };
-  const handleDeleteUser = () => {
-    DeleteUser(id);
+  const handleDeleteUser = async () => {
+    DeleteUser(id).then(() => {
+      loggout();
+    });
     loggout();
   };
   useEffect(() => {
     const getMyVideos = async () => {
       const data = await api.get(`post/myposts/${id}`);
-      setMyvideos(data.data);
+      setMyvideos(data.data.posts);
       console.log(myVideos);
     };
     getMyVideos();
@@ -141,9 +148,17 @@ export default function Profile({ getData }: getDataProps) {
                 <Text style={styles.title}>Editar</Text>
                 <View style={styles.inputs}>
                   <Text style={{ marginLeft: "7%" }}>Email:</Text>
-                  <InputEditable data={email} setChange={setEmail} />
+                  <InputEditable
+                    data={email}
+                    setChange={setEmail}
+                    isPassword={false}
+                  />
                   <Text style={{ marginLeft: "7%" }}>Senha:</Text>
-                  <InputEditable data={password} setChange={setPassword} />
+                  <InputEditable
+                    data={password}
+                    setChange={setPassword}
+                    isPassword={true}
+                  />
                   <ButtonAddPDF />
                 </View>
                 <TouchableOpacity
