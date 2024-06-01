@@ -41,6 +41,7 @@ export const styles = StyleSheet.create({
   },
   actionText:{
     textAlign: 'center',
+    color:'#FFF',
     textShadowColor:  'rgba(0,0,0, 0.20)',
     textShadowOffset: {width: -1, height: 1.5},
     textShadowRadius: 8

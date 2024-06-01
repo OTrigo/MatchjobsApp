@@ -14,20 +14,32 @@ export const style = StyleSheet.create({
     height: 40,
     borderStyle: "solid",
     borderRadius: 4,
-    borderWidth: 2,
+    borderWidth: 1,
     alignSelf: "center",
-    marginVertical: 20
+    marginVertical: 10
   },
   submit: {
     width: "50%",
     height: 40,
     backgroundColor: "#017bbed9",
     alignSelf: "center",
-    borderRadius: 4
+    justifyContent: "center",
+    borderRadius: 4,
+    marginTop: 15
   },
   textecenter: {
-    marginTop: "5%",
     textAlign: "center",
     color: "white"
+  },
+  Link: {
+    color: "blue",
+    textDecorationLine: "underline",
+    textAlign: "center",
+    marginTop: "7%"
+  },
+  label: {
+    marginLeft: "10%",
+    fontSize: 15,
+    fontWeight: "bold"
   }
 });
