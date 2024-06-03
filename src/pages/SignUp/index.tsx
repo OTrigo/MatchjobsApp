@@ -10,6 +10,7 @@ import {
 import { style } from "./styles";
 import { signUp } from "../../contexts/UserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Container, { Toast } from "toastify-react-native";
 
 interface navigationProps {
   navigation: any; //arrumar a tipagem
@@ -23,11 +24,15 @@ export default function SignUp({ navigation, getData }: navigationProps) {
     if (email === "" || password === "" || name === "") {
       return;
     }
-    await signUp({ email, password, name }).then(() => {
+    await signUp({ email, password, name }).then((result) => {
       setIsLoading(false);
+      if (result) {
+        setTimeout(() => {
+          getData();
+        }, 2000);
+      }
     });
     setIsLoading(false);
-    getData();
   }
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -35,6 +40,7 @@ export default function SignUp({ navigation, getData }: navigationProps) {
 
   return (
     <View>
+      <Container duration={2000} height={50} width={300} />
       <Image source={require("../../../assets/logo.png")} style={style.logo} />
       <Text style={style.label}>Nome:</Text>
       <TextInput

@@ -33,8 +33,6 @@ export default function ButtonAddVideo({ title, description }: videoProps) {
       allowsMultipleSelection: false
     });
 
-    console.log(result);
-
     if (!result.canceled) {
       setVideo(result);
     }

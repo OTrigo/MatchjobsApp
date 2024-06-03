@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     width: "70%",
     padding: 5,
     borderRadius: 3,
-    marginRight: "10%",
+    marginRight: "11%",
     marginVertical: "2%"
   },
   textWhite: {
@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
   },
   viewText: {
     backgroundColor: "#182237",
-    width: "80%",
+    width: "70%",
     alignSelf: "center",
     height: 30,
     borderRadius: 3,

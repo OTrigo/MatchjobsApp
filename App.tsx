@@ -32,9 +32,6 @@ export default function App() {
             setLogin(true);
           }
         })
-        .catch((e) => {
-          console.log(e);
-        })
         .finally(() => {
           setIsLoading(false);
         });

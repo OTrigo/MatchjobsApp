@@ -1,5 +1,6 @@
 import { AxiosError, AxiosRequestConfig } from "axios";
 import { api } from "../infra/axios";
+import { Toast } from "toastify-react-native";
 
 
 interface VideoProps {
@@ -40,11 +41,10 @@ async function UploadVideo(videoFile: VideoProps, nameFile: string, name:string,
   const response = await api.request(config)
   
     .then((response)=>{
-        console.log(response)
-        alert("video salvo com sucesso")
+        
+        Toast.success("video salvo com sucesso")
     })
     .catch((error) => {
-      console.log(error)
 
     });
     

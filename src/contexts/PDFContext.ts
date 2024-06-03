@@ -1,14 +1,16 @@
 import { AxiosRequestConfig } from "axios";
 import { api } from "../infra/axios";
+import Container, { Toast } from 'toastify-react-native';
 
 
 interface pdfProps {
+  userId: number;
   mimeType: string | undefined;
   name: string;
   size: number;
   uri: string;
 }
-async function UploadPDF(pdfFile: pdfProps, nameFile: string) {
+async function UploadPDF(pdfFile: pdfProps, nameFile: string, userId:pdfProps ) {
   const FormData = global.FormData;
   const formdata = new FormData();
   formdata.append("file", {
@@ -16,8 +18,9 @@ async function UploadPDF(pdfFile: pdfProps, nameFile: string) {
     type: pdfFile.mimeType,
     name: pdfFile.name
   });
+  const idString = userId.toString()
   formdata.append("nameFile", nameFile )
-  console.log(formdata)
+  formdata.append("userid", idString )
   const config: AxiosRequestConfig = {
     method: "post",
     url: "upload/",
@@ -33,10 +36,10 @@ async function UploadPDF(pdfFile: pdfProps, nameFile: string) {
   };
   const response = await api.request(config)
     .then(()=>{
-        alert("Curriculo salvo com sucesso")
+        Toast.success("Curriculo salvo com sucesso")
     })
     .catch((err) => {
-      console.error(err);
+        Toast.error("erro",'')
     });
     
 }

@@ -7,11 +7,13 @@ export const styles = StyleSheet.create({
     alignItems: "center"
   },
   input: {
-    marginVertical: "1%",
     width: "80%",
-    height: "5%",
+    height: 40,
+    borderStyle: "solid",
+    borderRadius: 4,
     borderWidth: 1,
-    borderRadius: 3
+    alignSelf: "center",
+    marginVertical: 10
   },
   preview: {
     width: 10

@@ -35,10 +35,12 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center"
   },
+
   modalContainer: {
+    width: "90%",
     backgroundColor: "white",
     borderRadius: 20,
-    height: "50%",
+    height: 450,
     paddingHorizontal: "7%",
     alignItems: "center",
     shadowColor: "#000",
@@ -51,9 +53,9 @@ export const styles = StyleSheet.create({
     elevation: 5
   },
   updateModalButton: {
+    width: "58%",
     alignSelf: "center",
     backgroundColor: "#037abe",
-    width: "70%",
     marginVertical: "3%",
     marginRight: "10%",
     borderRadius: 3,

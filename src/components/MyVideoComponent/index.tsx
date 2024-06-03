@@ -4,16 +4,14 @@ import { styles } from "./style";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import { api } from "../../infra/axios";
+import { Toast } from "toastify-react-native";
 
 export default function MyVideoComponent({ data }: any) {
   const handleDeleteVideo = async () => {
     const result = await api
       .get(`/upload-video/delete/${data.videoUrl}/${data.id}`)
       .then((response) => {
-        alert("deletado com sucesso");
-      })
-      .catch((err) => {
-        console.log(err);
+        Toast.success("deletado com sucesso");
       });
   };
   return (

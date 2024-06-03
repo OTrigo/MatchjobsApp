@@ -9,6 +9,7 @@ import {
 import { style } from "./styles";
 import { useState } from "react";
 import { signIn } from "../../contexts/UserContext";
+import Container, { Toast } from "toastify-react-native";
 
 interface navigationProps {
   navigation: any; //arrumar a tipagem
@@ -23,17 +24,23 @@ export default function Signin({ navigation, getData }: navigationProps) {
   async function handleLogin() {
     setIsLoading(true);
     if (email === "" || password === "") {
+      setIsLoading(false);
       return;
     }
-    await signIn({ email, password }).then(() => {
-      setIsLoading(true);
+    const result = await signIn({ email, password }).then((result) => {
+      if (result) {
+        setIsLoading(false);
+        setTimeout(() => {
+          getData();
+        }, 2000);
+      }
     });
-    setIsLoading(true);
-    getData();
+    setIsLoading(false);
   }
 
   return (
     <View>
+      <Container duration={2000} height={50} width={300} />
       <Image source={require("../../../assets/logo.png")} style={style.logo} />
       <Text style={style.label}>Email:</Text>
       <TextInput

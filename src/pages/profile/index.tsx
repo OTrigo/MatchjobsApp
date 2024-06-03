@@ -22,6 +22,7 @@ import { api } from "../../infra/axios";
 import { FlatList } from "react-native";
 import MyVideoComponent from "../../components/MyVideoComponent";
 import { useIsFocused } from "@react-navigation/native";
+import Container, { Toast } from "toastify-react-native";
 
 interface JwtPayload {
   id: number;
@@ -64,8 +65,6 @@ export default function Profile({ getData }: getDataProps) {
     };
 
     getAsyncData();
-
-    console.log(`post/myposts/${id}`);
   }, []);
   async function loggout() {
     await AsyncStorage.removeItem("@matchjobs");
@@ -76,15 +75,15 @@ export default function Profile({ getData }: getDataProps) {
     if (password != "") {
       await UpdateUser(email, password, id)
         .then((response) => {
-          console.log(response);
-          alert("usuario alterado, por favor realize o login novamente");
-          loggout();
+          setTimeout(() => {
+            loggout();
+          }, 2000);
         })
         .then(() => {
           setIsLoading(false);
         });
     } else {
-      alert("por favor insira sua senha para atualizar seus dados");
+      Toast.error("Por favor insira a senha", "");
     }
 
     setIsLoading(false);
@@ -93,13 +92,11 @@ export default function Profile({ getData }: getDataProps) {
     DeleteUser(id).then(() => {
       loggout();
     });
-    loggout();
   };
   useEffect(() => {
     const getMyVideos = async () => {
       const data = await api.get(`post/myposts/${id}`);
       setMyvideos(data.data.posts);
-      console.log(myVideos);
     };
     getMyVideos();
   }, [id, focused]);
@@ -137,6 +134,12 @@ export default function Profile({ getData }: getDataProps) {
           <View style={styles.backdrop}>
             <TouchableWithoutFeedback>
               <View style={styles.modalContainer}>
+                <Container
+                  animationIn="slideInRight"
+                  animationOut="slideOutLeft"
+                  height={50}
+                  duration={2000}
+                />
                 <TouchableOpacity
                   onPress={() => setIsOpen(false)}
                   style={styles.closeIcon}
@@ -168,7 +171,7 @@ export default function Profile({ getData }: getDataProps) {
                   {isLoading ? (
                     <ActivityIndicator color="#FFF" />
                   ) : (
-                    <Text style={{ color: "#FFF" }}>Atualizar dados</Text>
+                    <Text style={styles.textButton}>Atualizar dados</Text>
                   )}
                 </TouchableOpacity>
                 <TouchableOpacity

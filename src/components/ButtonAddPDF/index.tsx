@@ -23,7 +23,6 @@ export default function ButtonAddPDF() {
     });
     if (result.assets && result.assets.length > 0) {
       setSelectedPDF(result);
-      console.log(selectedPdf);
     }
   }
 
@@ -32,7 +31,7 @@ export default function ButtonAddPDF() {
 
     const userData = await AsyncStorage.getItem("@matchjobs");
     const { id, name } = jwtDecode(userData);
-    UploadPDF(selectedPdf?.assets[0], id + name).then(() => {
+    UploadPDF(selectedPdf?.assets[0], id + name, id).then(() => {
       setIsLoading(false);
     });
     setIsLoading(false);

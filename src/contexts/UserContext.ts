@@ -1,6 +1,7 @@
 import axios from "axios";
 import { api } from "../infra/axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Container, { Toast } from 'toastify-react-native';
 
 interface HandleLoginProp {
   email: string;
@@ -20,17 +21,20 @@ async function signIn({ email, password }: HandleLoginProp) {
       email,
       password
     });
+    Toast.success("login efetuado!", "top")
     await AsyncStorage.setItem(
       "@matchjobs",
       JSON.stringify(response.data.access_token)
+
     );
+    return true;
   } catch (err: any) {
     //arrumar tipagem
     if (err.response.status === 401) {
-      alert("Email ou senha invalido");
-      return;
+      Toast.error("Email ou senha invalido", 'Top');
+      return false
     }
-    console.error(err);
+    
   }
 }
 async function signUp({ email, password, name }: UserProp) {
@@ -45,13 +49,15 @@ async function signUp({ email, password, name }: UserProp) {
       "@matchjobs",
       JSON.stringify(response.data.access_token)
     );
+    Toast.success("Conta Criada!", "Top");
+    return true
   } catch (err: any) {
     //arrumar tipagem
-    if (err.response.status === 409) {
-      alert("Email já cadastrado");
-      return;
+    if (err) {
+      Toast.error("Erro ao criar conta", "Top");
+      return false
     }
-    console.error(err);
+    
   }
 }
 async function UpdateUser(email:string, password: string, id:number){
@@ -67,21 +73,20 @@ async function UpdateUser(email:string, password: string, id:number){
       }
 
     }).then((result)=>{
-      console.log(result.data)
+      Toast.success("alteração feita com sucesso")
+      return true
     }).catch ((err: any)=> {
-    console.error(err.data);
-    console.log(result)
+
+    return false
   })
 }
 async function DeleteUser(id:number){
-  const end = `user/${id}`
-  console.log(end)
-    const result = 
-    await axios.delete(`https://matchjobsbackend-7lo5.onrender.com/${end}`).then((response)=>{
-      console.log(response.data)
-      alert("usuario deletado com sucesso!")
+  const end = `user/${id}`;
+    await axios.delete(`https://matchjobsbackend-7lo5.onrender.com/${end}`).then(()=>{
+      Toast.success("usuario deletado com sucesso!", "Top")
+      return true;
     }).catch((error) =>{
-      console.log(error)
+      return false
   })
 }
 

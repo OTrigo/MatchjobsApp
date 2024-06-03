@@ -10,6 +10,7 @@ import { jwtDecode } from "jwt-decode";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
 import MyVideoComponent from "../MyVideoComponent";
+import Container, { Toast } from "toastify-react-native";
 
 interface FeedItemProps {
   data: any;
@@ -38,10 +39,10 @@ export function FeedItem({
           role: userData.role
         })
         .then((result) => {
-          alert("enviado com sucesso");
+          Toast.success("enviado com sucesso");
         })
         .catch((err) => {
-          console.log("erro", err.response);
+          Toast.error("Erro", "");
         });
     }
   }

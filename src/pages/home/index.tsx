@@ -13,6 +13,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import { useIsFocused } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 
 const { height: heightScreen } = Dimensions.get("screen");
 
@@ -20,12 +21,20 @@ export default function Home() {
   const focused = useIsFocused();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState({});
+  async function handleGetVideos() {
+    setLoading(true);
+    const videos: any = await api.get("post/");
+    if (!videos) {
+      return;
+    }
+    setMockedPost(videos.data);
+    setLoading(false);
+  }
   useEffect(() => {
     async function getUserData() {
       const storage = await AsyncStorage.getItem("@matchjobs");
       const userd = jwtDecode(storage ? storage : "");
       setUser(userd);
-      console.log(user);
     }
     async function getVideos() {
       setLoading(true);
@@ -34,22 +43,22 @@ export default function Home() {
         return;
       }
       setMockedPost(videos.data);
+      setShowItem(mockedPosts[0]);
       setLoading(false);
     }
     getVideos();
     getUserData();
   }, [focused]);
-  useEffect(() => {}, []);
   const [mockedPosts, setMockedPost] = useState([]);
   const [showItem, setShowItem] = useState(mockedPosts[0]);
-  const onViewRef = useRef(({ viewableItems }: any) => {
-    if (viewableItems && viewableItems.length > 0) {
-      setShowItem(mockedPosts[viewableItems[0].index]);
-      console.log(showItem);
+  const onViewRef = useRef(({ viewableItens }: any) => {
+    console.log(viewableItens);
+    if (viewableItens && viewableItens.length > 0) {
+      setShowItem(mockedPosts[viewableItens[0].index]);
     }
   });
 
-  return !loading ? (
+  return !loading && mockedPosts !== null ? (
     <View style={styles.container}>
       <View style={styles.labels}>
         <TouchableOpacity>
@@ -71,7 +80,7 @@ export default function Home() {
               userData={user}
             />
           )}
-          onViewableItemsChanged={onViewRef?.current}
+          onViewableItemsChanged={onViewRef.current}
           snapToAlignment="center"
           snapToInterval={heightScreen}
           scrollEventThrottle={200}
@@ -85,6 +94,15 @@ export default function Home() {
       </GestureHandlerRootView>
     </View>
   ) : (
-    <Text>Erro ao carregar videos</Text>
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Text style={{ color: "#037abe", fontSize: 18, marginVertical: "5%" }}>
+        Erro ao carregar videos
+      </Text>
+      <TouchableOpacity onPress={handleGetVideos}>
+        <Text>
+          <Ionicons name="reload" size={24} color="#037abe" />
+        </Text>
+      </TouchableOpacity>
+    </View>
   );
 }
