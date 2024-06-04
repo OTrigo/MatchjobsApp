@@ -4,7 +4,8 @@ import {
   TouchableOpacity,
   Text,
   FlatList,
-  Dimensions
+  Dimensions,
+  ActivityIndicator
 } from "react-native";
 import { styles } from "./styles";
 import { FeedItem } from "../../components/FeedItem";
@@ -18,6 +19,8 @@ import { Ionicons } from "@expo/vector-icons";
 const { height: heightScreen } = Dimensions.get("screen");
 
 export default function Home() {
+  const [mockedPosts, setMockedPost] = useState([]);
+  const [showItem, setShowItem] = useState(mockedPosts[0]);
   const focused = useIsFocused();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState({});
@@ -43,22 +46,28 @@ export default function Home() {
         return;
       }
       setMockedPost(videos.data);
-      setShowItem(mockedPosts[0]);
       setLoading(false);
     }
     getVideos();
     getUserData();
   }, [focused]);
-  const [mockedPosts, setMockedPost] = useState([]);
-  const [showItem, setShowItem] = useState(mockedPosts[0]);
-  const onViewRef = useRef(({ viewableItens }: any) => {
-    console.log(viewableItens);
-    if (viewableItens && viewableItens.length > 0) {
-      setShowItem(mockedPosts[viewableItens[0].index]);
-    }
-  });
+  useEffect(() => {
+    setShowItem(mockedPosts[0]);
+  }, [mockedPosts]);
 
-  return !loading && mockedPosts !== null ? (
+  const onViewableItemsChanged = ({
+    viewableItems
+  }: {
+    viewableItems: any;
+  }) => {
+    if (viewableItems && viewableItems.length > 0) {
+      setShowItem(mockedPosts[viewableItems[0].index]);
+    }
+  };
+
+  return loading ? (
+    <ActivityIndicator style={{ alignSelf: "center" }} />
+  ) : mockedPosts !== null ? (
     <View style={styles.container}>
       <View style={styles.labels}>
         <TouchableOpacity>
@@ -80,7 +89,7 @@ export default function Home() {
               userData={user}
             />
           )}
-          onViewableItemsChanged={onViewRef.current}
+          onViewableItemsChanged={onViewableItemsChanged}
           snapToAlignment="center"
           snapToInterval={heightScreen}
           scrollEventThrottle={200}

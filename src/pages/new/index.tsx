@@ -15,7 +15,12 @@ export default function New() {
       <TextInput value={title} onChangeText={setTitle} style={styles.input} />
       <Text style={styles.title}>Descrição</Text>
       <TextInput value={desc} onChangeText={setDesc} style={styles.input} />
-      <ButtonAddVideo title={title} description={desc} />
+      <ButtonAddVideo
+        title={title}
+        description={desc}
+        setTitle={setTitle}
+        setDescription={setDesc}
+      />
     </View>
   );
 }

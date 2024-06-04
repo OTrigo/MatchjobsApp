@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { SetStateAction, useState } from "react";
 import {
   Button,
   Image,
@@ -18,9 +18,16 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 interface videoProps {
   title: string;
   description: string;
+  setTitle: React.Dispatch<SetStateAction<string>>;
+  setDescription: React.Dispatch<SetStateAction<string>>;
 }
 
-export default function ButtonAddVideo({ title, description }: videoProps) {
+export default function ButtonAddVideo({
+  title,
+  description,
+  setTitle,
+  setDescription
+}: videoProps) {
   const date = new Date();
 
   const [video, setVideo] = useState<any>(null);
@@ -49,6 +56,9 @@ export default function ButtonAddVideo({ title, description }: videoProps) {
       id.toString()
     ).then(() => {
       setIsLoading(false);
+      setDescription("");
+      setTitle("");
+      setVideo(null);
     });
     setIsLoading(false);
   }
