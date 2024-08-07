@@ -22,6 +22,7 @@ import { api } from "../../infra/axios";
 import { FlatList } from "react-native";
 import MyVideoComponent from "../../components/MyVideoComponent";
 import { useIsFocused } from "@react-navigation/native";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 interface JwtPayload {
   id: number;
@@ -64,8 +65,6 @@ export default function Profile({ getData }: getDataProps) {
     };
 
     getAsyncData();
-
-    console.log(`post/myposts/${id}`);
   }, []);
   async function loggout() {
     await AsyncStorage.removeItem("@matchjobs");
@@ -105,20 +104,21 @@ export default function Profile({ getData }: getDataProps) {
   }, [id, focused]);
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={loggout} style={styles.loggout}>
+    <View className="flex h-full pt-3 bg-gray-900 w-full">
+      <TouchableOpacity onPress={loggout} className="self-end pr-3 pt-10">
         <Entypo name="log-out" size={24} color="red" />
       </TouchableOpacity>
-      <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: 20 }}>
+      <Text className="text-center font-bold text-xl w-fit color-white">
         Olá, {name}
       </Text>
       <TouchableOpacity
         onPress={() => setIsOpen(true)}
-        style={[styles.updateButton]}
+        className="w-4/12 h-10 self-center rounded-md bg-blue-600 items-center mt-10 flex-row justify-evenly"
       >
-        <Text style={(styles.textButton, { color: "#000" })}>Editar dados</Text>
+        <Text className="text-center text-white">Editar dados</Text>
+        <Ionicons name="person" size={17} color="white" />
       </TouchableOpacity>
-      <View style={styles.videosContainer}></View>
+      <View className="w-full border-t-2 border-blue-600 mt-10"></View>
       {myVideos && myVideos.length > 0 ? (
         <FlatList
           data={myVideos}
@@ -127,33 +127,42 @@ export default function Profile({ getData }: getDataProps) {
           numColumns={3}
         />
       ) : (
-        <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: 15 }}>
+        <Text className="text-center font-bold text-lg w-fit color-white">
           Você ainda não postou nenhum video
         </Text>
       )}
 
       <Modal animationType="fade" visible={isOpen} transparent={true}>
         <TouchableWithoutFeedback onPress={() => setIsOpen(false)}>
-          <View style={styles.backdrop}>
+          <View
+            style={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
+            className="h-full max-w-4xl items-center justify-center"
+          >
             <TouchableWithoutFeedback>
-              <View style={styles.modalContainer}>
+              <View className="bg-zinc-900 rounded items-center">
                 <TouchableOpacity
                   onPress={() => setIsOpen(false)}
                   style={styles.closeIcon}
                 >
-                  <Text>
-                    <AntDesign name="close" size={24} color="black" />
+                  <Text className="color-gray-500">
+                    <AntDesign name="close" size={24} />
                   </Text>
                 </TouchableOpacity>
-                <Text style={styles.title}>Editar</Text>
-                <View style={styles.inputs}>
-                  <Text style={{ marginLeft: "7%" }}>Email:</Text>
+                <Text className="text-center font-bold text-xl w-fit color-slate-50 mt-6">
+                  Editar
+                </Text>
+                <View className="mt-3">
+                  <Text className=" ml-10 font-bold text-lg w-fit color-white">
+                    Email:
+                  </Text>
                   <InputEditable
                     data={email}
                     setChange={setEmail}
                     isPassword={false}
                   />
-                  <Text style={{ marginLeft: "7%" }}>Senha:</Text>
+                  <Text className=" ml-10 font-bold text-lg w-fit color-white">
+                    Senha:
+                  </Text>
                   <InputEditable
                     data={password}
                     setChange={setPassword}
@@ -163,19 +172,23 @@ export default function Profile({ getData }: getDataProps) {
                 </View>
                 <TouchableOpacity
                   onPress={handleUpdateUser}
-                  style={styles.updateModalButton}
+                  className=" h-12 self-center rounded-md bg-blue-600 items-center mt-5 flex-row p-3"
                 >
                   {isLoading ? (
                     <ActivityIndicator color="#FFF" />
                   ) : (
-                    <Text style={{ color: "#FFF" }}>Atualizar dados</Text>
+                    <Text className=" font-bold text-lg text-center w-4/12 color-white">
+                      Atualizar dados
+                    </Text>
                   )}
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={handleDeleteUser}
-                  style={[styles.updateModalButton, { backgroundColor: "red" }]}
+                  className="h-12 self-center rounded-md bg-red-600 items-center mt-5 flex-row p-3 mb-10"
                 >
-                  <Text style={styles.textButton}>Deletar conta</Text>
+                  <Text className=" font-bold text-lg text-center w-4/12 color-white">
+                    Deletar conta
+                  </Text>
                 </TouchableOpacity>
               </View>
             </TouchableWithoutFeedback>

@@ -1,4 +1,5 @@
 import { ActivityIndicator, StatusBar, Text } from "react-native";
+import "./src/styles/global.css";
 import { NavigationContainer } from "@react-navigation/native";
 import { Routes } from "./src/routes";
 import Signin from "./src/pages/Signin";
