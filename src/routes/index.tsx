@@ -8,11 +8,10 @@ import New from "../pages/New";
 import Profile from "../pages/Profile";
 
 import { ButtonNew } from "../components/ButtonNew";
-import { getDataProps } from "../types/getData";
 
 const Tab = createBottomTabNavigator();
 
-export function Routes({ getData }: getDataProps) {
+export function Routes({ navigation }: any) {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -103,7 +102,7 @@ export function Routes({ getData }: getDataProps) {
           }
         }}
       >
-        {(props) => <Profile {...props} getData={getData} />}
+        {(props) => <Profile />}
       </Tab.Screen>
     </Tab.Navigator>
   );

@@ -5,11 +5,8 @@ import { styles } from "./styles";
 import { Ionicons } from "@expo/vector-icons";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { api } from "../../infra/axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { jwtDecode } from "jwt-decode";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
-import MyVideoComponent from "../MyVideoComponent";
 
 interface FeedItemProps {
   data: any;
@@ -24,14 +21,14 @@ export function FeedItem({
 }: FeedItemProps) {
   const isFocused = useIsFocused();
   const [status, setStatus] = useState<any>({});
-  const video = useRef<Video>(null);
+  const video = useRef<Video>(null); // Inicializa o ref corretamente
   const resizeValue = "contain" as ResizeMode;
 
   async function sendCV() {
     if (data.jobsId !== null) {
       const result = await api
         .post(`/job/portifolio/${data.jobsId}`, {
-          id: parseInt(userData.id),
+          id: userData.id,
           name: userData.name,
           email: userData.email,
           password: userData.password,
@@ -47,20 +44,21 @@ export function FeedItem({
   }
 
   useEffect(() => {
-    if (currentVisibleitem?.id === data?.id) {
-      video.current?.playAsync();
-    } else {
-      video.current?.pauseAsync();
-    }
-    if (!isFocused) {
-      video.current?.pauseAsync();
+    if (video.current) {
+      if (currentVisibleitem?.id === data?.id && isFocused) {
+        video.current.playAsync();
+      } else {
+        video.current.pauseAsync();
+      }
     }
   }, [currentVisibleitem, isFocused]);
 
   function handlePlayer() {
-    status?.isPlaying
-      ? video?.current?.pauseAsync()
-      : video?.current?.playAsync();
+    if (video.current) {
+      status?.isPlaying
+        ? video.current.pauseAsync()
+        : video.current.playAsync();
+    }
   }
 
   return (
@@ -99,7 +97,7 @@ export function FeedItem({
           ref={video}
           style={styles.video}
           source={{
-            uri: `https://lfrigfcolhycpfxcxnjn.supabase.co/storage/v1/object/public/matchjobsVideos/${data.videoUrl}`
+            uri: `${process.env.EXPO_PUBLIC_API}/upload/getVideo/${data.videoUrl}`
           }}
           resizeMode={resizeValue}
           shouldPlay={false}

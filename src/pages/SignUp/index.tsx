@@ -6,59 +6,97 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
-  ImageBackground
+  ImageBackground,
+  KeyboardAvoidingView,
+  Platform
 } from "react-native";
 import { signUp } from "../../contexts/UserContext";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import Entypo from "@expo/vector-icons/Entypo";
+import FlashMessage from "react-native-flash-message";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 interface navigationProps {
   navigation: any; //arrumar a tipagem
-  getData: () => Promise<void>;
 }
 
-export default function SignUp({ navigation, getData }: navigationProps) {
+export default function SignUp({ navigation }: navigationProps) {
   const [isLoading, setIsLoading] = useState(false);
   async function handleCreate() {
-    if (email === "" || password === "" || name === "") {
+    if (
+      email === "" ||
+      password === "" ||
+      confirmPassword === "" ||
+      name === ""
+    ) {
+      showMessage({
+        message: "Preencha todos os campos",
+        type: "warning",
+        icon: "warning"
+      });
       return;
     }
+    if (password !== confirmPassword) {
+      showMessage({
+        message: "Senhas diferentes por favor confira!",
+        description: "This is our second message",
+        type: "danger",
+        icon: "danger"
+      });
+      return;
+    }
+
     setIsLoading(true);
     await signUp({ email, password, name }).then(() => {
       setIsLoading(false);
     });
     setIsLoading(false);
-    getData();
   }
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   return (
-    <>
+    <KeyboardAvoidingView
+      className="flex-1 mt-10"
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
       <ImageBackground
         source={require("../../../assets/backgroundSignup.jpeg")}
-        className="h-2/5 flex "
+        className="h-2/6 flex "
       >
-        <TouchableOpacity
-          className="m-5 mt-10 bg-gray-900 max-w-10 h-10 items-center rounded-full justify-center"
-          onPress={() => navigation.goBack()}
-        >
-          <Text className="color-blue-600">
-            <Ionicons name="arrow-back-sharp" size={24} />
-          </Text>
-        </TouchableOpacity>
-        <Image
-          source={require("../../../assets/logo.png")}
-          className="max-w-96 max-h-96 mt-2 self-center"
-        />
+        <View className="flex flex-row w-full justify-between">
+          <TouchableOpacity
+            className="m-5 mt-10 bg-gray-900 w-10 h-10 items-center rounded-full justify-center"
+            onPress={() => navigation.goBack()}
+          >
+            <Text className="color-blue-600">
+              <Ionicons name="arrow-back-sharp" size={24} />
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            className="m-5 mt-10 bg-gray-900 w-10 h-10 items-center rounded-full justify-center"
+            onPress={
+              showPassword
+                ? () => setShowPassword(false)
+                : () => setShowPassword(true)
+            }
+          >
+            <Text className="color-blue-600">
+              <Ionicons name={showPassword ? "eye-off" : "eye"} size={24} />
+            </Text>
+          </TouchableOpacity>
+        </View>
       </ImageBackground>
-      <View className="flex bg-gray-900 h-full pt-10 " style={{ flex: 1 }}>
+      <View className="flex bg-gray-900 h-full  " style={{ flex: 1 }}>
         <Text className="text-lg text-white font-semibold ms-10 pt-7">
           Nome:
         </Text>
         <TextInput
           placeholder="João Carlos"
-          className="w-10/12 border-solid border border-white color-white focus:border-blue-400 h-12 rounded-md self-center placeholder:italic placeholder:text-slate-400 "
+          className="pl-4 w-10/12 border-solid border border-white color-white focus:border-blue-400 h-12 rounded-md self-center placeholder:italic placeholder:text-slate-400 "
           value={name}
           onChangeText={setName}
         />
@@ -68,7 +106,7 @@ export default function SignUp({ navigation, getData }: navigationProps) {
         <TextInput
           autoCapitalize="none"
           placeholder="meuemail@mail.com"
-          className="w-10/12 border-solid border border-white color-white focus:border-blue-400 h-12 rounded-md self-center placeholder:italic placeholder:text-slate-400 "
+          className="pl-4 w-10/12 border-solid border border-white color-white focus:border-blue-400 h-12 rounded-md self-center placeholder:italic placeholder:text-slate-400 "
           value={email}
           onChangeText={setEmail}
         />
@@ -78,11 +116,23 @@ export default function SignUp({ navigation, getData }: navigationProps) {
         <TextInput
           autoCapitalize="none"
           placeholder="********"
-          secureTextEntry={true}
-          className="w-10/12 border-solid border border-white color-white focus:border-blue-400 h-12 rounded-md self-center placeholder:italic placeholder:text-slate-400 "
+          secureTextEntry={showPassword}
+          className="pl-4 w-10/12 border-solid border border-white color-white focus:border-blue-400 h-12 rounded-md self-center placeholder:italic placeholder:text-slate-400 "
           value={password}
           onChangeText={setPassword}
         />
+        <Text className="text-lg text-white font-semibold ms-10 pt-7">
+          Repita a senha:
+        </Text>
+        <TextInput
+          autoCapitalize="none"
+          placeholder="********"
+          secureTextEntry={showPassword}
+          className="pl-4 w-10/12 border-solid border border-white color-white focus:border-blue-400 h-12 rounded-md self-center placeholder:italic placeholder:text-slate-400 "
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+        />
+
         <TouchableOpacity
           className="w-7/12 h-10 self-center rounded bg-blue-600 items-center justify-center mt-10"
           onPress={handleCreate}
@@ -97,7 +147,19 @@ export default function SignUp({ navigation, getData }: navigationProps) {
             </Text>
           )}
         </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Linkedin")}
+          className="w-7/12 h-10 self-center rounded bg-blue-600 flex-row justify-evenly items-center  mt-10"
+        >
+          <Text className="text-lg text-white self-center">
+            <Entypo name="linkedin" size={24} color="white" />
+          </Text>
+          <Text className="text-lg text-white self-center">
+            Criar conta com Linkedin
+          </Text>
+        </TouchableOpacity>
       </View>
-    </>
+      <FlashMessage position="top" />
+    </KeyboardAvoidingView>
   );
 }

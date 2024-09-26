@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import { styles } from "./styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getDataProps } from "../../types/getData";
 import ButtonAddPDF from "../../components/ButtonAddPDF";
 import { Entypo } from "@expo/vector-icons";
 import { InputEditable } from "../../components/Inputs";
@@ -23,6 +22,10 @@ import { FlatList } from "react-native";
 import MyVideoComponent from "../../components/MyVideoComponent";
 import { useIsFocused } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { navigate } from "../../contexts/NavigationContext";
+import FlashMessage, { showMessage } from "react-native-flash-message";
+import { DocumentPickerResult } from "expo-document-picker";
+import { UploadPDF } from "../../contexts/PDFContext";
 
 interface JwtPayload {
   id: number;
@@ -33,7 +36,7 @@ interface JwtPayload {
   exp: number;
 }
 interface myVideosProps {
-  id: number;
+  id: string;
   name: string;
   description: null | string;
   createdAt: string;
@@ -41,7 +44,10 @@ interface myVideosProps {
   videoUrl: null | string;
   jobsId: null | number;
 }
-export default function Profile({ getData }: getDataProps) {
+export default function Profile() {
+  const [selectedPdf, setSelectedPDF] = useState<DocumentPickerResult | null>(
+    null
+  );
   const [name, setName] = useState<string>("");
   const [myVideos, setMyvideos] = useState<null | [myVideosProps]>(null);
   const [password, setPassword] = useState<string>("");
@@ -49,61 +55,60 @@ export default function Profile({ getData }: getDataProps) {
   const [id, setId] = useState<number>(0);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoggedIn, setisLoggedIn] = useState<boolean>(false);
   const focused = useIsFocused();
 
   useEffect(() => {
-    const getAsyncData = async () => {
+    const getData = async () => {
       const token = await AsyncStorage.getItem("@matchjobs");
-      if (!token) {
-        loggout();
-        return;
+      if (token) {
+        const data = jwtDecode<JwtPayload>(token);
+        setName(data.name);
+        setEmail(data.email);
+        setId(data.id);
+        setisLoggedIn(true);
       }
-      const data = jwtDecode<JwtPayload>(token);
-      setName(data.name);
-      setEmail(data.email);
-      setId(data.id);
     };
-
-    getAsyncData();
+    getData();
   }, []);
   async function loggout() {
     await AsyncStorage.removeItem("@matchjobs");
-    getData();
+    navigate("SignIn");
   }
   const handleUpdateUser = async () => {
+    const userData = await AsyncStorage.getItem("@matchjobs");
+    const { id, name } = jwtDecode(userData);
+    UploadPDF(selectedPdf?.assets[0], id + name).then(() => {
+      setIsLoading(false);
+    });
+    setIsLoading(false);
     setIsLoading(true);
     if (password != "") {
-      await UpdateUser(email, password, id)
-        .then((response) => {
-          console.log(response);
-          alert("usuario alterado, por favor realize o login novamente");
-          loggout();
-        })
-        .then(() => {
-          setIsLoading(false);
+      await UpdateUser(email, password, id).then((response) => {
+        showMessage({
+          message: "usuario alterado, por favor realize o login novamente",
+          type: "success"
         });
-    } else {
-      alert("por favor insira sua senha para atualizar seus dados");
+        loggout();
+        setIsLoading(false);
+      });
     }
-
     setIsLoading(false);
   };
   const handleDeleteUser = async () => {
     DeleteUser(id).then(() => {
       loggout();
     });
-    loggout();
+  };
+  const getMyVideos = async () => {
+    const data = await api.get(`post/myposts/${id}`);
+    setMyvideos(data.data.posts);
   };
   useEffect(() => {
-    const getMyVideos = async () => {
-      const data = await api.get(`post/myposts/${id}`);
-      setMyvideos(data.data.posts);
-      console.log(myVideos);
-    };
     getMyVideos();
   }, [id, focused]);
 
-  return (
+  return isLoggedIn ? (
     <View className="flex h-full pt-3 bg-gray-900 w-full">
       <TouchableOpacity onPress={loggout} className="self-end pr-3 pt-10">
         <Entypo name="log-out" size={24} color="red" />
@@ -122,8 +127,10 @@ export default function Profile({ getData }: getDataProps) {
       {myVideos && myVideos.length > 0 ? (
         <FlatList
           data={myVideos}
-          renderItem={({ item }) => <MyVideoComponent data={item} />}
-          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <MyVideoComponent data={item} getVideos={getMyVideos} />
+          )}
+          keyExtractor={(item) => item.id}
           numColumns={3}
         />
       ) : (
@@ -168,7 +175,10 @@ export default function Profile({ getData }: getDataProps) {
                     setChange={setPassword}
                     isPassword={true}
                   />
-                  <ButtonAddPDF />
+                  <ButtonAddPDF
+                    selectedPdf={selectedPdf}
+                    setSelectedPDF={setSelectedPDF}
+                  />
                 </View>
                 <TouchableOpacity
                   onPress={handleUpdateUser}
@@ -195,6 +205,14 @@ export default function Profile({ getData }: getDataProps) {
           </View>
         </TouchableWithoutFeedback>
       </Modal>
+      <FlashMessage position="top" />
+    </View>
+  ) : (
+    <View>
+      <Text>Voce precisa estar logado para acessar essa pagina</Text>
+      <TouchableOpacity onPress={() => navigate("SignIn")}>
+        <Text>Fazer login</Text>
+      </TouchableOpacity>
     </View>
   );
 }

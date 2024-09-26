@@ -5,69 +5,51 @@ import { Routes } from "./src/routes";
 import Signin from "./src/pages/Signin";
 import SignUp from "./src/pages/SignUp";
 import "react-native-gesture-handler";
-
 import { createStackNavigator } from "@react-navigation/stack";
 import { useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { api } from "./src/infra/axios";
 import { View } from "react-native";
+import LinkedinLogin from "./src/pages/LinkedinLogin";
+import { isLogged } from "./src/contexts/UserContext";
+import { navigate, navigationRef } from "./src/contexts/NavigationContext";
 
 export default function App() {
-  const [login, setLogin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const Stack = createStackNavigator();
-  async function getData() {
-    setLogin(false);
-    setIsLoading(true);
-    const data = await AsyncStorage.getItem("@matchjobs");
-    if (data !== null) {
-      const config = `bearer ${data}`;
-      const response = await api
-        .get("/user/me", {
-          headers: {
-            Authorization: config.split('"').join("")
-          }
-        })
-        .then((response) => {
-          if (response.status == 200) {
-            setLogin(true);
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    }
-    setIsLoading(false);
-  }
+
   useEffect(() => {
-    getData();
-  }, []);
+    async function verifyLogin() {
+      const isLoggedStatus = await isLogged();
+      setIsLoading(false);
+      if (isLoggedStatus == true) {
+        navigate("Main");
+      }
+      setIsLoading(false);
+    }
+    verifyLogin();
+  });
 
   return !isLoading ? (
-    <>
-      <NavigationContainer>
-        <StatusBar
-          backgroundColor="transparent"
-          barStyle="light-content"
-          translucent
-        />
-        {login ? (
-          <Routes getData={getData} />
-        ) : (
-          <Stack.Navigator>
-            <Stack.Screen name="SignIn" options={{ headerShown: false }}>
-              {(props) => <Signin {...props} getData={getData} />}
-            </Stack.Screen>
-            <Stack.Screen name="SignUp" options={{ headerShown: false }}>
-              {(props) => <SignUp {...props} getData={getData} />}
-            </Stack.Screen>
-          </Stack.Navigator>
-        )}
-      </NavigationContainer>
-    </>
+    <NavigationContainer ref={navigationRef}>
+      <StatusBar
+        backgroundColor="transparent"
+        barStyle="dark-content"
+        translucent
+      />
+      <Stack.Navigator>
+        <Stack.Screen name="SignIn" options={{ headerShown: false }}>
+          {(props) => <Signin {...props} />}
+        </Stack.Screen>
+        <Stack.Screen name="SignUp" options={{ headerShown: false }}>
+          {(props) => <SignUp {...props} />}
+        </Stack.Screen>
+        <Stack.Screen name="Linkedin" options={{ headerShown: false }}>
+          {() => <LinkedinLogin />}
+        </Stack.Screen>
+        <Stack.Screen name="Main" options={{ headerShown: false }}>
+          {(props) => <Routes {...props} />}
+        </Stack.Screen>
+      </Stack.Navigator>
+    </NavigationContainer>
   ) : (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Text style={{ textAlign: "center", fontSize: 40 }}>

@@ -3,18 +3,23 @@ import * as DocumentPicker from "expo-document-picker";
 import { useEffect, useState } from "react";
 import { DocumentPickerResult } from "expo-document-picker";
 import { FontAwesome6 } from "@expo/vector-icons";
-import { styles } from "./styles";
 import { UploadPDF } from "../../contexts/PDFContext";
 import { jwtDecode } from "jwt-decode";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
-export default function ButtonAddPDF() {
+interface ButtonAddPDFProps {
+  selectedPdf: DocumentPickerResult | null;
+  setSelectedPDF: (pdf: DocumentPickerResult | null) => void;
+}
+
+export default function ButtonAddPDF({
+  selectedPdf,
+  setSelectedPDF
+}: ButtonAddPDFProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedPdf, setSelectedPDF] = useState<DocumentPickerResult | null>(
-    null
-  );
+
   useEffect(() => {}, [selectedPdf]);
 
   async function PickerPDF() {
