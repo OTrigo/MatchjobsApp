@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -15,12 +15,35 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import Entypo from "@expo/vector-icons/Entypo";
 import FlashMessage from "react-native-flash-message";
 import { showMessage, hideMessage } from "react-native-flash-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { jwtDecode } from "jwt-decode";
 
 interface navigationProps {
   navigation: any; //arrumar a tipagem
 }
 
 export default function SignUp({ navigation }: navigationProps) {
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [showPassword, setShowPassword] = useState(true);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  useEffect(() => {
+    async function getLinkedinData() {
+      const LinkedinToken = await AsyncStorage.getItem("@linkedinToken");
+      showMessage({
+        message: "Por favor defina uma senha para proximos acessos",
+        type: "warning"
+      });
+      if (LinkedinToken) {
+        const dataUser = jwtDecode(LinkedinToken);
+        setEmail(dataUser.email);
+        setName(dataUser.name);
+      }
+    }
+    getLinkedinData();
+  }, []);
   const [isLoading, setIsLoading] = useState(false);
   async function handleCreate() {
     if (
@@ -52,11 +75,6 @@ export default function SignUp({ navigation }: navigationProps) {
     });
     setIsLoading(false);
   }
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [showPassword, setShowPassword] = useState(true);
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
 
   return (
     <KeyboardAvoidingView
