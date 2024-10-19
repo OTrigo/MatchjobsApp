@@ -21,7 +21,7 @@ export function FeedItem({
 }: FeedItemProps) {
   const isFocused = useIsFocused();
   const [status, setStatus] = useState<any>({});
-  const video = useRef<Video>(null); // Inicializa o ref corretamente
+  const video = useRef<Video>(null);
   const resizeValue = "contain" as ResizeMode;
 
   async function sendCV() {

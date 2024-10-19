@@ -78,7 +78,7 @@ async function signUp({ email, password, name }: UserProp) {
     });
   }
 }
-async function UpdateUser(email: string, password: string, id: number) {
+async function UpdateUser(email: string, password: string, id: string) {
   const token = await AsyncStorage.getItem("@matchjobs");
   const config = `bearer ${token}`;
   const result = await api
@@ -97,8 +97,8 @@ async function UpdateUser(email: string, password: string, id: number) {
     .then((result) => {
       console.log(result.data);
     })
-    .catch((err: any) => {
-      console.error(err.data);
+    .catch((err:Error) => {
+      console.error(err.message);
       console.log(result);
     });
 }

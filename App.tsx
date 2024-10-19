@@ -11,6 +11,7 @@ import { View } from "react-native";
 import LinkedinLogin from "./src/pages/LinkedinLogin";
 import { isLogged } from "./src/contexts/UserContext";
 import { navigate, navigationRef } from "./src/contexts/NavigationContext";
+import PostVideo from "./src/pages/PostVideo";
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -38,6 +39,9 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen name="SignIn" options={{ headerShown: false }}>
           {(props) => <Signin {...props} />}
+        </Stack.Screen>
+        <Stack.Screen name="PostVideo" options={{ headerShown: false }}>
+          {(props) => <PostVideo {...props} />}
         </Stack.Screen>
         <Stack.Screen name="SignUp" options={{ headerShown: false }}>
           {(props) => <SignUp {...props} />}

@@ -54,7 +54,7 @@ export default function SignUp({ navigation }: navigationProps) {
   }
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(true);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -64,7 +64,7 @@ export default function SignUp({ navigation }: navigationProps) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <ImageBackground
-        source={require("../../../assets/backgroundSignup.jpeg")}
+        source={require("../../../assets/mjfundo.jpg")}
         className="h-2/6 flex "
       >
         <View className="flex flex-row w-full justify-between">

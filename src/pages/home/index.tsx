@@ -4,15 +4,22 @@ import {
   TouchableOpacity,
   Text,
   FlatList,
-  Dimensions
+  Dimensions,
+  ActivityIndicator
 } from "react-native";
 import { styles } from "./styles";
 import { FeedItem } from "../../components/FeedItem";
 import { api } from "../../infra/axios";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import {
+  GestureHandlerRootView,
+  RefreshControl
+} from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
-import { useIsFocused } from "@react-navigation/native";
+
+interface videosProps {
+  id: string;
+}
 
 const viewabilityConfig = {
   itemVisiblePercentThreshold: 50
@@ -66,7 +73,7 @@ export default function Home() {
           <Text style={[styles.labelText, { color: "#DDD" }]}>Seguindo</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleRefresh}>
           <Text style={[styles.labelText, { color: "#FFF" }]}>Pra Você</Text>
           <View style={styles.indicator}></View>
         </TouchableOpacity>
@@ -83,17 +90,23 @@ export default function Home() {
           )}
           onViewableItemsChanged={onViewRef.current}
           viewabilityConfig={viewabilityConfig}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item: videosProps) => item.id}
           snapToAlignment="center"
           snapToInterval={heightScreen}
           scrollEventThrottle={200}
           decelerationRate={"fast"}
           showsVerticalScrollIndicator={false}
-          refreshing={refreshing}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }
         />
       </GestureHandlerRootView>
     </View>
   ) : (
-    <Text>Erro ao carregar vídeos</Text>
+    <ActivityIndicator
+      color="blue"
+      size={40}
+      className="flex-1 items-center justify-center bg-gray-900"
+    />
   );
 }

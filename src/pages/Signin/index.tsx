@@ -44,14 +44,9 @@ export default function Signin({ navigation }: navigationProps) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <ImageBackground
-        source={require("../../../assets/backgroundLogin.jpeg")}
+        source={require("../../../assets/mjfundo.jpg")}
         className="h-2/5"
-      >
-        <Image
-          source={require("../../../assets/logo.png")}
-          className="max-w-96 max-h-96  self-center"
-        />
-      </ImageBackground>
+      ></ImageBackground>
       <View className=" bg-neutral-950 h-auto">
         <View className="w-full h-full rounded-md flex bg-center bg-gray-900 self-center">
           <Text className="text-lg text-white font-semibold ms-10 pt-10">
@@ -116,7 +111,6 @@ export default function Signin({ navigation }: navigationProps) {
           </TouchableOpacity>
         </View>
       </View>
-      <FlashMessage position="top" />
     </KeyboardAvoidingView>
   );
 }
