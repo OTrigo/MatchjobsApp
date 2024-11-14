@@ -76,13 +76,14 @@ export default function Profile() {
     navigate("SignIn");
   }
   const handleUpdateUser = async () => {
+    setIsLoading(true);
     const userData = await AsyncStorage.getItem("@matchjobs");
     const { id, name } = jwtDecode(userData);
-    UploadPDF(selectedPdf?.assets[0], id + name).then(() => {
-      setIsLoading(false);
-    });
-    setIsLoading(false);
-    setIsLoading(true);
+    if (selectedPdf) {
+      UploadPDF(selectedPdf?.assets[0], id + name).then(() => {
+        setIsLoading(false);
+      });
+    }
     if (password != "") {
       await UpdateUser(email, password, id).then((response) => {
         showMessage({
@@ -91,6 +92,12 @@ export default function Profile() {
         });
         loggout();
         setIsLoading(false);
+      });
+    } else {
+      showMessage({
+        message:
+          "Por favor digite sua senha, caso contrario só seu curriculo será atualizado",
+        type: "warning"
       });
     }
     setIsLoading(false);

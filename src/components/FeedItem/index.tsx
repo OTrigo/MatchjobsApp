@@ -3,10 +3,16 @@ import { Pressable, View, Text, TouchableOpacity } from "react-native";
 import { ResizeMode, Video } from "expo-av";
 import { styles } from "./styles";
 import { Ionicons } from "@expo/vector-icons";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import {
+  Gesture,
+  GestureDetector,
+  TouchableWithoutFeedback
+} from "react-native-gesture-handler";
 import { api } from "../../infra/axios";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import FlashMessage, { showMessage } from "react-native-flash-message";
 
 interface FeedItemProps {
   data: any;
@@ -19,23 +25,32 @@ export function FeedItem({
   currentVisibleitem,
   userData
 }: FeedItemProps) {
+  const [lastClickTime, setLastClickTime] = useState(0);
+  const [clickCount, setClickCount] = useState(0);
   const isFocused = useIsFocused();
   const [status, setStatus] = useState<any>({});
   const video = useRef<Video>(null);
   const resizeValue = "contain" as ResizeMode;
 
-  async function sendCV() {
-    if (data.jobsId !== null) {
+  async function sendCV(id: String) {
+    const token = await AsyncStorage.getItem("@matchjobs");
+    const config = ` bearer ${token}`;
+    if (id !== null) {
       const result = await api
-        .post(`/job/portifolio/${data.jobsId}`, {
-          id: userData.id,
-          name: userData.name,
-          email: userData.email,
-          password: userData.password,
-          role: userData.role
-        })
+        .post(
+          `/job/apply/${id}`,
+          {},
+          {
+            headers: {
+              Authorization: config.split('"').join("")
+            }
+          }
+        )
         .then((result) => {
-          alert("enviado com sucesso");
+          showMessage({
+            message: "enviado com sucesso",
+            type: "success"
+          });
         })
         .catch((err) => {
           console.log("erro", err.response);
@@ -61,14 +76,19 @@ export function FeedItem({
     }
   }
 
+  const handleDoubleClick = (id: string) => {
+    const currentTime = new Date().getTime();
+    const timeDifference = currentTime - lastClickTime;
+    if (timeDifference < 500 && timeDifference > 0) {
+      setClickCount(clickCount + 1);
+      sendCV(id);
+    } else {
+      setLastClickTime(currentTime);
+    }
+  };
+
   return (
-    <GestureDetector
-      gesture={Gesture.Tap()
-        .numberOfTaps(2)
-        .onStart(() => {
-          console.log(data.id);
-        })}
-    >
+    <TouchableWithoutFeedback onPress={() => handleDoubleClick(data.jobId)}>
       <Pressable onPress={handlePlayer} style={styles.container}>
         <View style={[styles.info, { bottom: 110 }]}>
           <Text style={styles.name}>{data?.name}</Text>
@@ -78,8 +98,11 @@ export function FeedItem({
         </View>
 
         <View style={styles.actions}>
-          {data.jobsId && (
-            <TouchableOpacity onPress={sendCV} style={styles.actionButton}>
+          {data.jobId && (
+            <TouchableOpacity
+              onPress={() => sendCV(data.jobId)}
+              style={styles.actionButton}
+            >
               <MaterialCommunityIcons name="file-send" size={35} color="#fff" />
             </TouchableOpacity>
           )}
@@ -106,6 +129,7 @@ export function FeedItem({
           onPlaybackStatusUpdate={(status) => setStatus(status)}
         />
       </Pressable>
-    </GestureDetector>
+      <FlashMessage position="top" />
+    </TouchableWithoutFeedback>
   );
 }

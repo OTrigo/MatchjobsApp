@@ -1,6 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 import { api } from "../infra/axios";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { showMessage } from "react-native-flash-message";
 
 interface pdfProps {
   mimeType: string | undefined;
@@ -8,7 +9,9 @@ interface pdfProps {
   size: number;
   uri: string;
 }
-async function UploadPDF(pdfFile: pdfProps, nameFile: string) {
+async function UploadPDF(pdfFile: pdfProps) {
+  const token = await AsyncStorage.getItem("@matchjobs");
+  const code = `bearer ${token}`;
   const FormData = global.FormData;
   const formdata = new FormData();
   formdata.append("file", {
@@ -16,28 +19,30 @@ async function UploadPDF(pdfFile: pdfProps, nameFile: string) {
     type: pdfFile.mimeType,
     name: pdfFile.name
   });
-  formdata.append("nameFile", nameFile )
-  console.log(formdata)
   const config: AxiosRequestConfig = {
     method: "post",
-    url: "upload/",
+    url: `/upload/uploadPdf`,
     responseType: "json",
     headers: {
-      "Content-Type": "multipart/form-data"
-
+      "Content-Type": "multipart/form-data",
+      "Authorization": code.split('"').join("")
     },
     transformRequest: (data, headers) => {
       return formdata;
     },
     data: formdata
   };
-  const response = await api.request(config)
-    .then(()=>{
-        alert("Curriculo salvo com sucesso")
+  console.log('config'+JSON.stringify(config))
+  const response = await api
+    .request(config)
+    .then(() => {
+      showMessage({
+        message: "curriculo atualizado",
+        type: "success"
+      });
     })
     .catch((err) => {
       console.error(err);
     });
-    
 }
 export { UploadPDF };

@@ -4,7 +4,7 @@ import { styles } from "./style";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import { api } from "../../infra/axios";
-import { showMessage } from "react-native-flash-message";
+import FlashMessage, { showMessage } from "react-native-flash-message";
 
 export default function MyVideoComponent({ data, getVideos }: any) {
   const handleDeleteVideo = async () => {
@@ -38,6 +38,7 @@ export default function MyVideoComponent({ data, getVideos }: any) {
           <MaterialIcons name="delete-forever" size={28} color="red" />
         </Text>
       </TouchableOpacity>
+      <FlashMessage position="top" />
     </View>
   );
 }

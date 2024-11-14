@@ -12,6 +12,7 @@ import LinkedinLogin from "./src/pages/LinkedinLogin";
 import { isLogged } from "./src/contexts/UserContext";
 import { navigate, navigationRef } from "./src/contexts/NavigationContext";
 import PostVideo from "./src/pages/PostVideo";
+import FlashMessage from "react-native-flash-message";
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -53,6 +54,7 @@ export default function App() {
           {(props) => <Routes {...props} />}
         </Stack.Screen>
       </Stack.Navigator>
+      <FlashMessage position="top" />
     </NavigationContainer>
   ) : (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
