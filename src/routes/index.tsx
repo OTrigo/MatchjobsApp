@@ -37,27 +37,19 @@ export function Routes({ navigation }: any) {
           }
         }}
       />
-      {/* <Tab.Screen
+      <Tab.Screen
         name="Search"
         component={Search}
         options={{
           tabBarIcon: ({ focused, size, color }) => {
             if (focused) {
-              return (
-                <Ionicons name="search" size={size} color={color} />
-              );
+              return <Ionicons name="search" size={size} color={color} />;
             }
 
-            return (
-              <Ionicons
-                name="search-outline"
-                size={size}
-                color={color}
-               />
-            );
+            return <Ionicons name="search-outline" size={size} color={color} />;
           }
         }}
-      /> */}
+      />
       <Tab.Screen
         name="New"
         component={New}
@@ -65,7 +57,7 @@ export function Routes({ navigation }: any) {
           tabBarIcon: ({ size }) => <ButtonNew size={size} />
         }}
       />
-      {/* <Tab.Screen
+      <Tab.Screen
         name="Inbox"
         component={Inbox}
         options={{
@@ -76,7 +68,7 @@ export function Routes({ navigation }: any) {
                   name="chatbubble-ellipses"
                   size={size}
                   color={color}
-                 />
+                />
               );
             }
 
@@ -85,11 +77,11 @@ export function Routes({ navigation }: any) {
                 name="chatbubble-ellipses-outline"
                 size={size}
                 color={color}
-               />
+              />
             );
           }
         }}
-      /> */}
+      />
       <Tab.Screen
         name="Profile"
         options={{

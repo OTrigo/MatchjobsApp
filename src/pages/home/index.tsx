@@ -82,11 +82,7 @@ export default function Home() {
         <FlatList
           data={posts}
           renderItem={({ item }) => (
-            <FeedItem
-              data={item}
-              currentVisibleitem={showItem}
-              userData={user}
-            />
+            <FeedItem data={item} currentVisibleitem={showItem} />
           )}
           onViewableItemsChanged={onViewRef.current}
           viewabilityConfig={viewabilityConfig}

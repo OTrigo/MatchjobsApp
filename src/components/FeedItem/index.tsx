@@ -17,14 +17,9 @@ import FlashMessage, { showMessage } from "react-native-flash-message";
 interface FeedItemProps {
   data: any;
   currentVisibleitem: any;
-  userData: any;
 }
 
-export function FeedItem({
-  data,
-  currentVisibleitem,
-  userData
-}: FeedItemProps) {
+export function FeedItem({ data, currentVisibleitem }: FeedItemProps) {
   const [lastClickTime, setLastClickTime] = useState(0);
   const [clickCount, setClickCount] = useState(0);
   const isFocused = useIsFocused();
@@ -36,7 +31,7 @@ export function FeedItem({
     const token = await AsyncStorage.getItem("@matchjobs");
     const config = ` bearer ${token}`;
     if (id !== null) {
-      const result = await api
+      await api
         .post(
           `/job/apply/${id}`,
           {},
@@ -109,7 +104,7 @@ export function FeedItem({
 
           <TouchableOpacity style={styles.actionButton}>
             <Ionicons name="chatbubble-ellipses" size={35} color="#fff" />
-            <Text style={styles.actionText}>25.3K</Text>
+            <Text style={styles.actionText}>{data.like || "25.5k"}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.actionButton}>
             <Ionicons name="bookmark" size={35} color="#fff" />

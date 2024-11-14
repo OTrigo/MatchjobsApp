@@ -32,7 +32,7 @@ export default function MyVideoComponent({ data, getVideos }: any) {
         shouldPlay={false}
         isMuted={true}
       />
-      <Text style={styles.title}>{data.name}</Text>
+      <Text style={styles.title}>{data.title}</Text>
       <TouchableOpacity onPress={handleDeleteVideo}>
         <Text style={{ textAlign: "center" }}>
           <MaterialIcons name="delete-forever" size={28} color="red" />
