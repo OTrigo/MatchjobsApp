@@ -17,10 +17,11 @@ function InputEditable({ data, setChange, isPassword }: propsEdit) {
   }
   const [isEditable, setIsEditable] = useState(false);
   return (
-    <View style={styles.inputView}>
+    <View className="flex flex-row justify-center">
       <TextInput
-        style={styles.input}
+        className="w-8/12 border-solid pl-3 border color-white border-white h-10 rounded-md  placeholder:italic placeholder:text-slate-400 mt-2 mb-2 mr-2"
         value={data}
+        style={{ borderColor: isEditable ? "#2763eb" : "white" }}
         onChangeText={setChange}
         editable={isEditable}
         secureTextEntry={isPassword}
@@ -30,7 +31,7 @@ function InputEditable({ data, setChange, isPassword }: propsEdit) {
         <FontAwesome5
           name="edit"
           size={26}
-          color="#037abe"
+          color="#2763eb"
           style={styles.edit}
         />
       </TouchableOpacity>

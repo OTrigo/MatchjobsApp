@@ -8,11 +8,10 @@ import New from "../pages/New";
 import Profile from "../pages/Profile";
 
 import { ButtonNew } from "../components/ButtonNew";
-import { getDataProps } from "../types/getData";
 
 const Tab = createBottomTabNavigator();
 
-export function Routes({ getData }: getDataProps) {
+export function Routes({ navigation }: any) {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -38,27 +37,19 @@ export function Routes({ getData }: getDataProps) {
           }
         }}
       />
-      {/* <Tab.Screen
+      <Tab.Screen
         name="Search"
         component={Search}
         options={{
           tabBarIcon: ({ focused, size, color }) => {
             if (focused) {
-              return (
-                <Ionicons name="search" size={size} color={color} />
-              );
+              return <Ionicons name="search" size={size} color={color} />;
             }
 
-            return (
-              <Ionicons
-                name="search-outline"
-                size={size}
-                color={color}
-               />
-            );
+            return <Ionicons name="search-outline" size={size} color={color} />;
           }
         }}
-      /> */}
+      />
       <Tab.Screen
         name="New"
         component={New}
@@ -66,7 +57,7 @@ export function Routes({ getData }: getDataProps) {
           tabBarIcon: ({ size }) => <ButtonNew size={size} />
         }}
       />
-      {/* <Tab.Screen
+      <Tab.Screen
         name="Inbox"
         component={Inbox}
         options={{
@@ -77,7 +68,7 @@ export function Routes({ getData }: getDataProps) {
                   name="chatbubble-ellipses"
                   size={size}
                   color={color}
-                 />
+                />
               );
             }
 
@@ -86,11 +77,11 @@ export function Routes({ getData }: getDataProps) {
                 name="chatbubble-ellipses-outline"
                 size={size}
                 color={color}
-               />
+              />
             );
           }
         }}
-      /> */}
+      />
       <Tab.Screen
         name="Profile"
         options={{
@@ -103,7 +94,7 @@ export function Routes({ getData }: getDataProps) {
           }
         }}
       >
-        {(props) => <Profile {...props} getData={getData} />}
+        {(props) => <Profile />}
       </Tab.Screen>
     </Tab.Navigator>
   );

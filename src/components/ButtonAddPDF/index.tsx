@@ -3,16 +3,23 @@ import * as DocumentPicker from "expo-document-picker";
 import { useEffect, useState } from "react";
 import { DocumentPickerResult } from "expo-document-picker";
 import { FontAwesome6 } from "@expo/vector-icons";
-import { styles } from "./styles";
 import { UploadPDF } from "../../contexts/PDFContext";
 import { jwtDecode } from "jwt-decode";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
-export default function ButtonAddPDF() {
+interface ButtonAddPDFProps {
+  selectedPdf: DocumentPickerResult | null;
+  setSelectedPDF: (pdf: DocumentPickerResult | null) => void;
+}
+
+export default function ButtonAddPDF({
+  selectedPdf,
+  setSelectedPDF
+}: ButtonAddPDFProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedPdf, setSelectedPDF] = useState<DocumentPickerResult | null>(
-    null
-  );
+
   useEffect(() => {}, [selectedPdf]);
 
   async function PickerPDF() {
@@ -42,33 +49,36 @@ export default function ButtonAddPDF() {
   }
   return (
     <>
-      <View style={styles.container}>
-        <TouchableOpacity style={styles.buttonAdd} onPress={PickerPDF}>
-          <Text style={styles.textWhite}>Escolher PDF</Text>
-        </TouchableOpacity>
-        {selectedPdf?.assets && (
-          <TouchableOpacity style={styles.buttonAdd} onPress={handleUploadPDF}>
-            <Text style={styles.textWhite}>Enviar pdf</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-
       {selectedPdf?.assets && (
-        <View style={styles.containerContent}>
-          <View style={styles.viewText}>
+        <View className="flex flex-row items-center justify-center max-w-4xl mt-3">
+          <View className="self-center justify-self-center w-3/6 bg-blue-500 p-1 rounded-md">
             <Text
-              style={styles.textWhite}
+              className="text-center color-white"
               numberOfLines={1}
               ellipsizeMode="tail"
             >
               {selectedPdf.assets[0].name}
             </Text>
           </View>
-          <TouchableOpacity style={styles.deleteFile} onPress={RemovePDF}>
-            <FontAwesome6 name="file-circle-xmark" size={26} color="red" />
+          <TouchableOpacity
+            className="h-9 self-center w-10 ml-4 rounded-md bg-red-500 items-center justify-center"
+            onPress={RemovePDF}
+          >
+            <MaterialIcons name="highlight-remove" size={24} color="white" />
           </TouchableOpacity>
         </View>
       )}
+      <View className="items-center flex-row justify-around w-12/12 self-center">
+        <TouchableOpacity
+          className="h-9 self-center w-60 rounded-md bg-blue-600 flex-row items-center mt-5 justify-center"
+          onPress={PickerPDF}
+        >
+          <Text className="color-white">Escolher Arquivo</Text>
+          <Text className="text-center color-white">
+            <MaterialIcons name="upload-file" size={27} color="white" />
+          </Text>
+        </TouchableOpacity>
+      </View>
     </>
   );
 }

@@ -4,13 +4,18 @@ import { styles } from "./style";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import { api } from "../../infra/axios";
+import FlashMessage, { showMessage } from "react-native-flash-message";
 
-export default function MyVideoComponent({ data }: any) {
+export default function MyVideoComponent({ data, getVideos }: any) {
   const handleDeleteVideo = async () => {
     const result = await api
-      .get(`/upload-video/delete/${data.videoUrl}/${data.id}`)
+      .delete(`/post/${data.id}`)
       .then((response) => {
-        alert("deletado com sucesso");
+        showMessage({
+          message: "Deletado com sucesso",
+          type: "success"
+        });
+        getVideos();
       })
       .catch((err) => {
         console.log(err);
@@ -21,18 +26,19 @@ export default function MyVideoComponent({ data }: any) {
       <Video
         style={styles.video}
         source={{
-          uri: `https://lfrigfcolhycpfxcxnjn.supabase.co/storage/v1/object/public/matchjobsVideos/${data?.videoUrl}`
+          uri: `${process.env.EXPO_PUBLIC_API}/upload/getVideo/${data.videoUrl}`
         }}
         resizeMode={ResizeMode.CONTAIN}
         shouldPlay={false}
         isMuted={true}
       />
-      <Text style={styles.title}>{data.name}</Text>
+      <Text style={styles.title}>{data.title}</Text>
       <TouchableOpacity onPress={handleDeleteVideo}>
         <Text style={{ textAlign: "center" }}>
           <MaterialIcons name="delete-forever" size={28} color="red" />
         </Text>
       </TouchableOpacity>
+      <FlashMessage position="top" />
     </View>
   );
 }

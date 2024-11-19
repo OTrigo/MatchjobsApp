@@ -15,14 +15,10 @@ import { jwtDecode } from "jwt-decode";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UploadVideo } from "../../contexts/VideoContext";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-interface videoProps {
-  title: string;
-  description: string;
-}
+import FlashMessage, { showMessage } from "react-native-flash-message";
+import { navigate } from "../../contexts/NavigationContext";
 
-export default function ButtonAddVideo({ title, description }: videoProps) {
-  const date = new Date();
-
+export default function ButtonAddVideo() {
   const [video, setVideo] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -32,9 +28,6 @@ export default function ButtonAddVideo({ title, description }: videoProps) {
       videoMaxDuration: 180,
       allowsMultipleSelection: false
     });
-
-    console.log(result);
-
     if (!result.canceled) {
       setVideo(result);
     }
@@ -43,15 +36,21 @@ export default function ButtonAddVideo({ title, description }: videoProps) {
     setIsLoading(true);
     const userData: any = await AsyncStorage.getItem("@matchjobs");
     const { id, name } = jwtDecode(userData);
-    UploadVideo(
-      video.assets[0],
-      id + name + date.getHours() + date.getMinutes() + date.getSeconds(),
-      title,
-      description,
-      id.toString()
-    ).then(() => {
-      setIsLoading(false);
-    });
+    UploadVideo(video.assets[0])
+      .then(() => {
+        setIsLoading(false);
+        showMessage({
+          message: "Video postado com sucesso",
+          type: "success"
+        });
+        navigate("Main");
+      })
+      .catch(() => {
+        showMessage({
+          message: "Algo deu errado, tente novamente mais tarde!",
+          type: "danger"
+        });
+      });
     setIsLoading(false);
   }
   function RemoveVideo() {
@@ -60,7 +59,10 @@ export default function ButtonAddVideo({ title, description }: videoProps) {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={pickImage}>
+      <TouchableOpacity
+        className="w-7/12 h-10 self-center rounded bg-blue-600 items-center justify-center mt-10 mb-5"
+        onPress={pickImage}
+      >
         <Text style={{ color: "#FFF", fontWeight: "bold" }}>
           Escolher Video
         </Text>
@@ -74,7 +76,10 @@ export default function ButtonAddVideo({ title, description }: videoProps) {
             style={styles.video}
             resizeMode={ResizeMode.CONTAIN}
           />
-          <TouchableOpacity onPress={handleUploadVideo} style={styles.button}>
+          <TouchableOpacity
+            className="w-7/12 h-10 self-center rounded bg-blue-600 items-center justify-center mt-10 mb-10"
+            onPress={handleUploadVideo}
+          >
             {isLoading ? (
               <ActivityIndicator color="#FFF" />
             ) : (
@@ -83,11 +88,12 @@ export default function ButtonAddVideo({ title, description }: videoProps) {
           </TouchableOpacity>
           <TouchableOpacity onPress={RemoveVideo}>
             <Text>
-              <FontAwesome name="remove" size={24} color="#037abe" />
+              <FontAwesome name="remove" size={24} color="#FFF" />
             </Text>
           </TouchableOpacity>
         </>
       )}
+      <FlashMessage position="top" />
     </View>
   );
 }

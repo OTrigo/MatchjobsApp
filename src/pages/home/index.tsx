@@ -4,50 +4,67 @@ import {
   TouchableOpacity,
   Text,
   FlatList,
-  Dimensions
+  Dimensions,
+  ActivityIndicator
 } from "react-native";
 import { styles } from "./styles";
 import { FeedItem } from "../../components/FeedItem";
 import { api } from "../../infra/axios";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import {
+  GestureHandlerRootView,
+  RefreshControl
+} from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
-import { useIsFocused } from "@react-navigation/native";
+
+interface videosProps {
+  id: string;
+}
+
+const viewabilityConfig = {
+  itemVisiblePercentThreshold: 50
+};
 
 const { height: heightScreen } = Dimensions.get("screen");
 
 export default function Home() {
-  const focused = useIsFocused();
+  const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState({});
+  const [posts, setPosts] = useState([]);
+  const [showItem, setShowItem] = useState(null);
+
+  const onViewRef = useRef(({ viewableItems }: any) => {
+    if (viewableItems && viewableItems.length > 0) {
+      const visibleItem = viewableItems[0]?.item;
+      setShowItem(visibleItem);
+    }
+  });
+
+  async function getVideos() {
+    setLoading(true);
+    const videos = await api.get("post/");
+    if (!videos) {
+      return;
+    }
+    setPosts(videos.data);
+    setLoading(false);
+  }
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await getVideos();
+    setRefreshing(false);
+  };
+
   useEffect(() => {
     async function getUserData() {
       const storage = await AsyncStorage.getItem("@matchjobs");
       const userd = jwtDecode(storage ? storage : "");
       setUser(userd);
-      console.log(user);
-    }
-    async function getVideos() {
-      setLoading(true);
-      const videos: any = await api.get("post/");
-      if (!videos) {
-        return;
-      }
-      setMockedPost(videos.data);
-      setLoading(false);
     }
     getVideos();
     getUserData();
-  }, [focused]);
-  useEffect(() => {}, []);
-  const [mockedPosts, setMockedPost] = useState([]);
-  const [showItem, setShowItem] = useState(mockedPosts[0]);
-  const onViewRef = useRef(({ viewableItems }: any) => {
-    if (viewableItems && viewableItems.length > 0) {
-      setShowItem(mockedPosts[viewableItems[0].index]);
-      console.log(showItem);
-    }
-  });
+  }, []);
 
   return !loading ? (
     <View style={styles.container}>
@@ -56,35 +73,36 @@ export default function Home() {
           <Text style={[styles.labelText, { color: "#DDD" }]}>Seguindo</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleRefresh}>
           <Text style={[styles.labelText, { color: "#FFF" }]}>Pra Você</Text>
           <View style={styles.indicator}></View>
         </TouchableOpacity>
       </View>
       <GestureHandlerRootView style={styles.container}>
         <FlatList
-          data={mockedPosts}
+          data={posts}
           renderItem={({ item }) => (
-            <FeedItem
-              data={item}
-              currentVisibleitem={showItem}
-              userData={user}
-            />
+            <FeedItem data={item} currentVisibleitem={showItem} />
           )}
-          onViewableItemsChanged={onViewRef?.current}
+          onViewableItemsChanged={onViewRef.current}
+          viewabilityConfig={viewabilityConfig}
+          keyExtractor={(item: videosProps) => item.id}
           snapToAlignment="center"
           snapToInterval={heightScreen}
           scrollEventThrottle={200}
           decelerationRate={"fast"}
-          viewabilityConfig={{
-            waitForInteraction: false,
-            viewAreaCoveragePercentThreshold: 100
-          }}
           showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }
         />
       </GestureHandlerRootView>
     </View>
   ) : (
-    <Text>Erro ao carregar videos</Text>
+    <ActivityIndicator
+      color="blue"
+      size={40}
+      className="flex-1 items-center justify-center bg-gray-900"
+    />
   );
 }
