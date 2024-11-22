@@ -86,7 +86,7 @@ export function FeedItem({ data, currentVisibleitem }: FeedItemProps) {
     <TouchableWithoutFeedback onPress={() => handleDoubleClick(data.jobId)}>
       <Pressable onPress={handlePlayer} style={styles.container}>
         <View style={[styles.info, { bottom: 110 }]}>
-          <Text style={styles.name}>{data?.name}</Text>
+          <Text style={styles.name}>{data?.title}</Text>
           <Text numberOfLines={2} style={styles.description}>
             {data?.description}
           </Text>

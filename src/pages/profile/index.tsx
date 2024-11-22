@@ -72,6 +72,7 @@ export default function Profile() {
     getData();
   }, []);
   async function loggout() {
+    await AsyncStorage.removeItem("@portifolio1");
     await AsyncStorage.removeItem("@matchjobs");
     navigate("SignIn");
   }
@@ -79,8 +80,8 @@ export default function Profile() {
     setIsLoading(true);
     const userData = await AsyncStorage.getItem("@matchjobs");
     const { id, name } = jwtDecode(userData);
-    if (selectedPdf) {
-      UploadPDF(selectedPdf?.assets[0], id + name).then(() => {
+    if (selectedPdf !== null) {
+      UploadPDF(selectedPdf?.assets[0]).then(() => {
         setIsLoading(false);
       });
     }
@@ -90,6 +91,7 @@ export default function Profile() {
           message: "usuario alterado, por favor realize o login novamente",
           type: "success"
         });
+        setIsLoading(false);
         loggout();
         setIsLoading(false);
       });
@@ -215,11 +217,19 @@ export default function Profile() {
       <FlashMessage position="top" />
     </View>
   ) : (
-    <View>
-      <Text>Voce precisa estar logado para acessar essa pagina</Text>
-      <TouchableOpacity onPress={() => navigate("SignIn")}>
-        <Text>Fazer login</Text>
-      </TouchableOpacity>
+    <View
+      style={{ flex: 1 }}
+      className=" bg-gray-900 items-center justify-center"
+    >
+      <Text className="color-white font-bold text-5xl">Ops...</Text>
+      <Text className="color-white text-2xl">
+        Você precisa estar logado para acessar essa pagina
+        <TouchableOpacity onPress={() => navigate("SignIn")}>
+          <Text className="color-blue-700 underline  pl-1 text-2xl text-center pt-9">
+            Fazer login
+          </Text>
+        </TouchableOpacity>
+      </Text>
     </View>
   );
 }

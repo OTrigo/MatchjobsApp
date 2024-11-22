@@ -39,29 +39,25 @@ export default function LinkedinLogin() {
       const codeValue = urlParams.get("code");
       if (codeValue) {
         const response = await getDataFromLinkedin(codeValue);
-        verifyHasAccount();
+        console.log(response);
+        navigate("Main");
+        //verifyHasAccount();
       }
     }
   };
   async function verifyHasAccount() {
     console.log(userInfo);
-    const has = await api
+
+    /*await api
       .get(`/user/find/${userInfo.email}`)
       .then((res) => {
-        console.log("res", res.status);
         if (res.status === 200) {
-          setHasAccount(true);
-        }
-        console.log(hasAccount);
-        if (hasAccount) {
           navigate("Main");
-        } else {
-          navigate("SignUp");
         }
       })
       .catch(() => {
         console.log("erro");
-      });
+      });*/
   }
   async function getDataFromLinkedin(code: string) {
     const response = await fetch(TOKEN_URL, {

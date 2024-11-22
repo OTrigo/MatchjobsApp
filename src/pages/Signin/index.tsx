@@ -12,7 +12,6 @@ import { signIn } from "../../contexts/UserContext";
 import { ImageBackground } from "react-native";
 import { KeyboardAvoidingView } from "react-native";
 import Entypo from "@expo/vector-icons/Entypo";
-import FlashMessage from "react-native-flash-message";
 
 interface navigationProps {
   navigation: any; //arrumar a tipagem

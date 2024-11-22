@@ -2,12 +2,8 @@ import { View, Text, TouchableOpacity } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
 import { useEffect, useState } from "react";
 import { DocumentPickerResult } from "expo-document-picker";
-import { FontAwesome6 } from "@expo/vector-icons";
-import { UploadPDF } from "../../contexts/PDFContext";
-import { jwtDecode } from "jwt-decode";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface ButtonAddPDFProps {
   selectedPdf: DocumentPickerResult | null;
@@ -18,38 +14,36 @@ export default function ButtonAddPDF({
   selectedPdf,
   setSelectedPDF
 }: ButtonAddPDFProps) {
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {}, [selectedPdf]);
+  const [namePdf, setNamePdf] = useState<string | null>(null);
+  useEffect(() => {
+    async function getPortifolioName() {
+      const portifolio = await AsyncStorage.getItem("@portifolio1");
+      console.log(portifolio);
+      setNamePdf(portifolio);
+    }
+    getPortifolioName();
+  }, []);
 
   async function PickerPDF() {
-    let result: DocumentPickerResult = await DocumentPicker.getDocumentAsync({
+    const result: DocumentPickerResult = await DocumentPicker.getDocumentAsync({
       type: "application/pdf",
       copyToCacheDirectory: true,
       multiple: false
     });
+
     if (result.assets && result.assets.length > 0) {
       setSelectedPDF(result);
-      console.log(selectedPdf);
+      setNamePdf(result?.assets[0].name);
+      await AsyncStorage.setItem("@portifolio1", result?.assets[0].name);
     }
   }
 
-  async function handleUploadPDF() {
-    setIsLoading(true);
-
-    const userData = await AsyncStorage.getItem("@matchjobs");
-    const { id, name } = jwtDecode(userData);
-    UploadPDF(selectedPdf?.assets[0], id + name).then(() => {
-      setIsLoading(false);
-    });
-    setIsLoading(false);
-  }
   function RemovePDF() {
     setSelectedPDF(null);
   }
   return (
     <>
-      {selectedPdf?.assets && (
+      {(namePdf || selectedPdf) && (
         <View className="flex flex-row items-center justify-center max-w-4xl mt-3">
           <View className="self-center justify-self-center w-3/6 bg-blue-500 p-1 rounded-md">
             <Text
@@ -57,15 +51,17 @@ export default function ButtonAddPDF({
               numberOfLines={1}
               ellipsizeMode="tail"
             >
-              {selectedPdf.assets[0].name}
+              {namePdf}
             </Text>
           </View>
-          <TouchableOpacity
-            className="h-9 self-center w-10 ml-4 rounded-md bg-red-500 items-center justify-center"
-            onPress={RemovePDF}
-          >
-            <MaterialIcons name="highlight-remove" size={24} color="white" />
-          </TouchableOpacity>
+          {selectedPdf && (
+            <TouchableOpacity
+              className="h-9 self-center w-10 ml-4 rounded-md bg-red-500 items-center justify-center"
+              onPress={RemovePDF}
+            >
+              <MaterialIcons name="highlight-remove" size={24} color="white" />
+            </TouchableOpacity>
+          )}
         </View>
       )}
       <View className="items-center flex-row justify-around w-12/12 self-center">

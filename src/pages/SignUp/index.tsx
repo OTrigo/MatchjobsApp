@@ -29,21 +29,6 @@ export default function SignUp({ navigation }: navigationProps) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  useEffect(() => {
-    async function getLinkedinData() {
-      const LinkedinToken = await AsyncStorage.getItem("@linkedinToken");
-      showMessage({
-        message: "Por favor defina uma senha para proximos acessos",
-        type: "warning"
-      });
-      if (LinkedinToken) {
-        const dataUser = jwtDecode(LinkedinToken);
-        setEmail(dataUser.email);
-        setName(dataUser.name);
-      }
-    }
-    getLinkedinData();
-  }, []);
   const [isLoading, setIsLoading] = useState(false);
   async function handleCreate() {
     if (
@@ -62,7 +47,6 @@ export default function SignUp({ navigation }: navigationProps) {
     if (password !== confirmPassword) {
       showMessage({
         message: "Senhas diferentes por favor confira!",
-        description: "This is our second message",
         type: "danger",
         icon: "danger"
       });

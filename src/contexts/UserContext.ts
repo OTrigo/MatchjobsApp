@@ -4,6 +4,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { navigate } from "./NavigationContext";
 import { useState } from "react";
 import { showMessage } from "react-native-flash-message";
+import { userProps } from "../types/userProps";
+import { jwtDecode } from "jwt-decode";
 
 interface HandleLoginProp {
   email: string;
@@ -25,6 +27,11 @@ async function signIn({ email, password }: HandleLoginProp) {
     await AsyncStorage.setItem(
       "@matchjobs",
       JSON.stringify(response.data.access_token)
+    );
+    const { portifolio }: userProps = jwtDecode(response.data.access_token);
+    await AsyncStorage.setItem(
+      "@portifolio1",
+      JSON.stringify(portifolio)
     );
     showMessage({
       message: "Login efetuado!",
